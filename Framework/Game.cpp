@@ -7,6 +7,10 @@ Game * Game::Instance()
 	return &instance;
 }
 
+void Game::UpdatePeriodicity()
+{
+}
+
 void Game::Test()
 {
 	//MessageBox(NULL, L"test", L"test", MB_OK);

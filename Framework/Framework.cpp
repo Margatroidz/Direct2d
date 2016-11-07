@@ -11,7 +11,6 @@
 HINSTANCE hInst;                                // 目前執行個體
 WCHAR szTitle[MAX_LOADSTRING];                  // 標題列文字
 WCHAR szWindowClass[MAX_LOADSTRING];            // 主視窗類別名稱
-Direct2D  direct2D;
 
 // 這個程式碼模組中所包含之函式的向前宣告: 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -137,7 +136,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
-		direct2D.CreateDirect2dDevice(hWnd);
+		Direct::Instance()->CreateDirect2dDevice(hWnd);
 		Game::Instance();
 	}
 	break;
@@ -160,7 +159,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_PAINT:
 	{
-		direct2D.Test2(IDB_PNG1);
+		Direct::Instance()->Test2(IDB_PNG1);
 		//PAINTSTRUCT ps;
 		//HDC hdc = BeginPaint(hWnd, &ps);
 		//// TODO: 在此加入任何使用 hdc 的繪圖程式碼...

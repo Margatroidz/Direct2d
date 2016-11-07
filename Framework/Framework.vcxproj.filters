@@ -33,6 +33,12 @@
     <ClInclude Include="Direct2D.h">
       <Filter>原始程式檔</Filter>
     </ClInclude>
+    <ClInclude Include="GameBitmap.h">
+      <Filter>原始程式檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>原始程式檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp">
@@ -42,6 +48,12 @@
       <Filter>原始程式檔</Filter>
     </ClCompile>
     <ClCompile Include="Direct2D.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBitmap.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,25 +3,28 @@
 #include <d2d1_2.h>
 #include <d2d1_2helper.h>
 
-class Direct2D
+class GameBitmap;
+class Direct
 {
 public:
-	Direct2D();
-	~Direct2D();
+	static Direct* Instance();
 	HRESULT CreateDirect2dDevice(HWND hwnd);
+	GameBitmap* LoadResourceBitmap(int resourceNumber);
+	GameBitmap* LoadResourceBitmap(PCWSTR resourceName);
+	void DestroyResourceBitmap(GameBitmap* gameBitmap);
+	void BeginLoad();
+	void EndLoad();
+	void BeginDraw();
+	void EndDraw();
+	void Draw(GameBitmap* bitmap);
 	HRESULT Test();
 	HRESULT Test2(int imageId);
 private:
+	Direct();
+	~Direct();
 	HWND _hwnd;
-	RECT rectangle;
 	ID2D1Factory* _direct2dFactory;
 	ID2D1HwndRenderTarget* _direct2dRenderTarget;
-	HRESULT LoadResourceBitmap(
-		ID2D1RenderTarget *pRenderTarget,
-		IWICImagingFactory *pIWICFactory,
-		PCWSTR resourceName,
-		PCWSTR resourceType,
-		UINT destinationWidth,
-		UINT destinationHeight,
-		ID2D1Bitmap **ppBitmap);
+	IWICImagingFactory *_wicFactory;
+	RECT _renderArea;
 };
