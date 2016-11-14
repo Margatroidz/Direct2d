@@ -5,10 +5,11 @@ class Game
 {
 public:
 	static Game* Instance();
-	void UpdatePeriodicity();
+	void FixedUpdate();
 	void Test();
+	void Release();
 private:
 	Game();
 	~Game();
-	Scene* scene;
+	Scene* _scene;
 };

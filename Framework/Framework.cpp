@@ -17,6 +17,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+void CALLBACK FixedUpdated(HWND, UINT, UINT, DWORD);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -51,8 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_FRAMEWORK));
 
 	MSG msg;
-
-	// 主訊息迴圈: 
+	SetTimer(NULL, 0, 16, FixedUpdated);
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -135,11 +135,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_CREATE:
-	{
-		Direct::Instance()->CreateDirect2dDevice(hWnd);
+		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
 		Game::Instance();
-	}
-	break;
+		break;
 	case WM_COMMAND:
 	{
 		int wmId = LOWORD(wParam);
@@ -158,18 +156,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_PAINT:
-	{
-		Direct::Instance()->Test2(IDB_PNG1);
-		//PAINTSTRUCT ps;
-		//HDC hdc = BeginPaint(hWnd, &ps);
-		//// TODO: 在此加入任何使用 hdc 的繪圖程式碼...
-		//EndPaint(hWnd, &ps);
 		ValidateRect(hWnd, NULL);
-	}
-	break;
+		break;
 	case WM_ERASEBKGND:
 		break;
 	case WM_DESTROY:
+		//Game要比Direct和Audio(還沒做)早釋放，因為載入是他們做的，所以也會叫他們釋放，若Direct和Audio先release，那麼Game去call就會error
+		Game::Instance()->Release();
 		PostQuitMessage(0);
 		break;
 	default:
@@ -196,4 +189,10 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+void CALLBACK FixedUpdated(HWND hwnd, UINT message, UINT timerID, DWORD time)
+{
+	//MessageBeep(-1);
+	Game::Instance()->FixedUpdate();
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "GameBitmap.h"
+#include "Image.h"
 
 class Scene
 {
@@ -12,5 +12,7 @@ public:
 	virtual void OnInput();
 	virtual void OnClose();
 private:
-	GameBitmap* test;
+	Image* test;
+	float counter;
+	float step;
 };
