@@ -1,5 +1,3 @@
-#pragma comment(lib, "d2d1")
-#pragma comment(lib, "windowscodecs")
 #include <d2d1_2.h>
 #include <d2d1_2helper.h>
 

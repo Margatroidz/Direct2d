@@ -1,3 +1,5 @@
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "windowscodecs")
 #include "Direct2D.h"
 #include <windows.h>
 #include <wincodec.h>
@@ -103,8 +105,8 @@ void Direct2D::Draw(Image* image)
 		image->_bitmap, D2D1::RectF(
 			image->_topLeftX,
 			image->_topLeftY,
-			image->_topLeftX + size.width * 10,
-			image->_topLeftY + size.height * 10));
+			image->_topLeftX + size.width,
+			image->_topLeftY + size.height));
 }
 
 ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
