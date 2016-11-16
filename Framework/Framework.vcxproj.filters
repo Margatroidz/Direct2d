@@ -69,6 +69,30 @@
     <Image Include="Framework.ico">
       <Filter>資源檔</Filter>
     </Image>
+    <Image Include="image\E_bullet_00.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\E_bullet_01.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\E_bullet_02.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\E_bullet_03.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\E_bullet_04.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\E_bullet_05.png">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="bitmap2.bmp">
+      <Filter>資源檔</Filter>
+    </Image>
+    <Image Include="image\tttt.png">
+      <Filter>資源檔</Filter>
+    </Image>
     <Image Include="tttt.png">
       <Filter>資源檔</Filter>
     </Image>

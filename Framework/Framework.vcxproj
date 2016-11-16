@@ -166,7 +166,15 @@
     <ResourceCompile Include="Framework.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bitmap2.bmp" />
     <Image Include="Framework.ico" />
+    <Image Include="image\E_bullet_00.png" />
+    <Image Include="image\E_bullet_01.png" />
+    <Image Include="image\E_bullet_02.png" />
+    <Image Include="image\E_bullet_03.png" />
+    <Image Include="image\E_bullet_04.png" />
+    <Image Include="image\E_bullet_05.png" />
+    <Image Include="image\tttt.png" />
     <Image Include="small.ico" />
     <Image Include="tttt.png" />
   </ItemGroup>

@@ -11,12 +11,12 @@ public:
 	HRESULT CreateDirect2dDevice(HWND hwnd);
 	ID2D1Bitmap* LoadBitmap(int resourceNumber);
 	ID2D1Bitmap* LoadBitmap(char* resourceName);
-	void DestroyBitmap(ID2D1Bitmap* bitmap);
+	void DestroyBitmap(ID2D1Bitmap* image);
 	void BeginLoad();
 	void EndLoad();
 	void BeginDraw();
 	void EndDraw();
-	void Draw(Image* bitmap);
+	void Draw(Image* image);
 private:
 	Direct2D();
 	~Direct2D();

@@ -1,11 +1,6 @@
 #pragma once
-#include <vector>
 
 struct ID2D1Bitmap;
-struct Point {
-	float x;
-	float y;
-};
 
 class Image
 {
@@ -17,7 +12,8 @@ public:
 	friend class Direct2D;
 protected:
 	ID2D1Bitmap* _bitmap;
-	Point _topLeft;
+	float _topLeftX;
+	float _topLeftY;
 };
 
 class Bitmap : public Image
@@ -37,5 +33,9 @@ public:
 	virtual ~Animation();
 	void Draw();
 private:
-	std::vector<ID2D1Bitmap*> _bitmap[];
+	ID2D1Bitmap** _bitmaps;
+	const int _size;
+	const int _interval;
+	int _counter;
+	int _position;
 };

@@ -63,9 +63,9 @@ ID2D1Bitmap* Direct2D::LoadBitmap(char* resourceName)
 	return LoadBitmap((WCHAR*)resourceName);;
 }
 
-void Direct2D::DestroyBitmap(ID2D1Bitmap* bitmap)
+void Direct2D::DestroyBitmap(ID2D1Bitmap* image)
 {
-	SafeRelease(&bitmap);
+	SafeRelease(&image);
 }
 
 void Direct2D::BeginLoad()
@@ -93,19 +93,18 @@ void Direct2D::EndDraw()
 	_direct2dRenderTarget->EndDraw();
 }
 
-void Direct2D::Draw(Image* bitmap)
+void Direct2D::Draw(Image* image)
 {
-	if (!bitmap) throw L"NULL Image !";
+	if (!image) throw L"NULL Image !";
 	if (!_direct2dRenderTarget) throw L"NULL RenderTarget !";
 
-	D2D1_SIZE_F size = bitmap->_bitmap->GetSize();
-	Point upperLeftCorner = bitmap->_topLeft;
+	D2D1_SIZE_F size = image->_bitmap->GetSize();
 	_direct2dRenderTarget->DrawBitmap(
-		bitmap->_bitmap, D2D1::RectF(
-			upperLeftCorner.x,
-			upperLeftCorner.y,
-			upperLeftCorner.x + size.width,
-			upperLeftCorner.y + size.height));
+		image->_bitmap, D2D1::RectF(
+			image->_topLeftX,
+			image->_topLeftY,
+			image->_topLeftX + size.width * 10,
+			image->_topLeftY + size.height * 10));
 }
 
 ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
