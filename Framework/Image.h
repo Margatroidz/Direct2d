@@ -11,7 +11,6 @@ public:
 	void Transfer(float x, float y);
 	friend class Direct2D;
 protected:
-	ID2D1Bitmap* _bitmap;
 	float _topLeftX;
 	float _topLeftY;
 };
@@ -23,6 +22,8 @@ public:
 	Bitmap(int resourceNumber);
 	virtual ~Bitmap();
 	void Draw();
+private:
+	ID2D1Bitmap* _bitmap;
 };
 
 class Animation : public Image
@@ -34,8 +35,7 @@ public:
 	void Draw();
 private:
 	ID2D1Bitmap** _bitmaps;
-	const int _size;
+	ID2D1Bitmap** _bitmap;
 	const int _interval;
 	int _counter;
-	int _position;
 };

@@ -6,12 +6,12 @@
 #include "Direct2D.h"
 
 #define MAX_LOADSTRING 100
-
-// 全域變數: 
-HINSTANCE hInst;                                // 目前執行個體
-WCHAR szTitle[MAX_LOADSTRING];                  // 標題列文字
-WCHAR szWindowClass[MAX_LOADSTRING];            // 主視窗類別名稱
-
+namespace {
+	// 全域變數: 
+	HINSTANCE hInst;                                // 目前執行個體
+	WCHAR szTitle[MAX_LOADSTRING];                  // 標題列文字
+	WCHAR szWindowClass[MAX_LOADSTRING];            // 主視窗類別名稱
+}
 // 這個程式碼模組中所包含之函式的向前宣告: 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);

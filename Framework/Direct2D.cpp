@@ -3,6 +3,7 @@
 #include "Direct2D.h"
 #include <windows.h>
 #include <wincodec.h>
+#include <memory>
 #include "Image.h"
 #define ASSERT(hr) if(!SUCCEEDED(hr)){ throw hr; }
 
@@ -95,24 +96,24 @@ void Direct2D::EndDraw()
 	_direct2dRenderTarget->EndDraw();
 }
 
-void Direct2D::Draw(Image* image)
+void Direct2D::Draw(ID2D1Bitmap* _bitmap, float _topLeftX, float _topLeftY)
 {
-	if (!image) throw L"NULL Image !";
+	if (!_bitmap) throw L"NULL Image !";
 	if (!_direct2dRenderTarget) throw L"NULL RenderTarget !";
 
-	D2D1_SIZE_F size = image->_bitmap->GetSize();
+	D2D1_SIZE_F size = _bitmap->GetSize();
 	_direct2dRenderTarget->DrawBitmap(
-		image->_bitmap, D2D1::RectF(
-			image->_topLeftX,
-			image->_topLeftY,
-			image->_topLeftX + size.width,
-			image->_topLeftY + size.height));
+			_bitmap, D2D1::RectF(
+			_topLeftX,
+			_topLeftY,
+			_topLeftX + size.width,
+			_topLeftY + size.height));
 }
 
 ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
 {
 	ID2D1Bitmap* bitmap = NULL;
-	IWICBitmapDecoder *pDecoder = NULL;
+	IWICBitmapDecoder* pDecoder = NULL;
 	IWICBitmapFrameDecode *pSource = NULL;
 	IWICStream *pStream = NULL;
 	IWICFormatConverter *pConverter = NULL;

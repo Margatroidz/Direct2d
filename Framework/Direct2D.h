@@ -5,6 +5,9 @@ class Image;
 class Direct2D
 {
 public:
+
+	Direct2D(const Direct2D&) = delete;
+	Direct2D& operator=(const Direct2D&) = delete;
 	static Direct2D* Instance();
 	HRESULT CreateDirect2dDevice(HWND hwnd);
 	ID2D1Bitmap* LoadBitmap(int resourceNumber);
@@ -14,7 +17,7 @@ public:
 	void EndLoad();
 	void BeginDraw();
 	void EndDraw();
-	void Draw(Image* image);
+	void Draw(ID2D1Bitmap* _bitmap, float _topLeftX, float _topLeftY);
 private:
 	Direct2D();
 	~Direct2D();
