@@ -10,19 +10,19 @@
 template<class Interface>
 inline void SafeRelease(Interface **ppInterfaceToRelease)
 {
-	if (*ppInterfaceToRelease != NULL)
+	if (*ppInterfaceToRelease != nullptr)
 	{
 		(*ppInterfaceToRelease)->Release();
-		(*ppInterfaceToRelease) = NULL;
+		(*ppInterfaceToRelease) = nullptr;
 	}
 }
 
 Direct2D::Direct2D()
 {
-	_hwnd = NULL;
-	_direct2dFactory = NULL;
-	_direct2dRenderTarget = NULL;
-	_wicFactory = NULL;
+	_hwnd = nullptr;
+	_direct2dFactory = nullptr;
+	_direct2dRenderTarget = nullptr;
+	_wicFactory = nullptr;
 }
 
 Direct2D::~Direct2D()
@@ -73,7 +73,7 @@ void Direct2D::DestroyBitmap(ID2D1Bitmap* image)
 
 void Direct2D::BeginLoad()
 {
-	CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&_wicFactory);
+	CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&_wicFactory);
 }
 
 void Direct2D::EndLoad()
@@ -83,73 +83,57 @@ void Direct2D::EndLoad()
 
 void Direct2D::BeginDraw()
 {
-	if (_direct2dRenderTarget == NULL) throw L"NULL RenderTarget !";
-
 	_direct2dRenderTarget->BeginDraw();
 	_direct2dRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 }
 
 void Direct2D::EndDraw()
 {
-	if (_direct2dRenderTarget == NULL) throw L"NULL RenderTarget !";
-
 	_direct2dRenderTarget->EndDraw();
 }
 
-void Direct2D::Draw(ID2D1Bitmap* _bitmap, float _topLeftX, float _topLeftY)
+void Direct2D::Rotate(D2D1::Matrix3x2F matrix)
 {
-	if (!_bitmap) throw L"NULL Image !";
-	if (!_direct2dRenderTarget) throw L"NULL RenderTarget !";
+	_direct2dRenderTarget->SetTransform(matrix);
+}
+
+void Direct2D::Draw(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity)
+{
+	if (!_bitmap) throw L"nullptr Image !";
 
 	D2D1_SIZE_F size = _bitmap->GetSize();
-	_direct2dRenderTarget->DrawBitmap(
-			_bitmap, D2D1::RectF(
-			_topLeftX,
-			_topLeftY,
-			_topLeftX + size.width,
-			_topLeftY + size.height));
+	_direct2dRenderTarget->DrawBitmap(_bitmap, rect, opacity);
 }
 
 ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
 {
-	ID2D1Bitmap* bitmap = NULL;
-	IWICBitmapDecoder* pDecoder = NULL;
-	IWICBitmapFrameDecode *pSource = NULL;
-	IWICStream *pStream = NULL;
-	IWICFormatConverter *pConverter = NULL;
+	ID2D1Bitmap* bitmap = nullptr;
+	IWICBitmapDecoder* pDecoder = nullptr;
+	IWICBitmapFrameDecode *pSource = nullptr;
+	IWICStream *pStream = nullptr;
+	IWICFormatConverter *pConverter = nullptr;
 
-	HRSRC imageResHandle = NULL;
-	HGLOBAL imageResDataHandle = NULL;
-	void *pImageFile = NULL;
-	DWORD imageFileSize = 0;
 
 	// Locate the resource.
-	imageResHandle = FindResourceW(GetModuleHandle(NULL), resourceName, L"Image");
-	HRESULT hr = imageResHandle ? S_OK : E_FAIL;
-	ASSERT(hr);
-	imageResDataHandle = LoadResource(GetModuleHandle(NULL), imageResHandle);
-	hr = imageResDataHandle ? S_OK : E_FAIL;
-	ASSERT(hr);
-	pImageFile = LockResource(imageResDataHandle);
-	hr = pImageFile ? S_OK : E_FAIL;
-	ASSERT(hr);
-	imageFileSize = SizeofResource(GetModuleHandle(NULL), imageResHandle);
-	hr = imageFileSize ? S_OK : E_FAIL;
-	ASSERT(hr);
-	hr = _wicFactory->CreateStream(&pStream);
-	ASSERT(hr);
-	hr = pStream->InitializeFromMemory(reinterpret_cast<BYTE*>(pImageFile), imageFileSize);
-	ASSERT(hr);
-	hr = _wicFactory->CreateDecoderFromStream(pStream, NULL, WICDecodeMetadataCacheOnLoad, &pDecoder);
-	ASSERT(hr);
-	hr = pDecoder->GetFrame(0, &pSource);
-	ASSERT(hr);
-	hr = _wicFactory->CreateFormatConverter(&pConverter);
-	ASSERT(hr);
-	hr = pConverter->Initialize(pSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.f, WICBitmapPaletteTypeMedianCut);
-	ASSERT(hr);
-	hr = _direct2dRenderTarget->CreateBitmapFromWicBitmap(pConverter, NULL, &bitmap);
-	ASSERT(hr);
+	HRSRC imageResHandle = FindResourceW(GetModuleHandle(nullptr), resourceName, L"Image");
+	ASSERT(imageResHandle ? S_OK : E_FAIL);
+
+	HGLOBAL imageResDataHandle = LoadResource(GetModuleHandle(nullptr), imageResHandle);
+	ASSERT(imageResDataHandle ? S_OK : E_FAIL);
+
+	void *pImageFile = LockResource(imageResDataHandle);
+	ASSERT(pImageFile ? S_OK : E_FAIL);
+
+	DWORD imageFileSize = SizeofResource(GetModuleHandle(nullptr), imageResHandle);
+	ASSERT(imageFileSize ? S_OK : E_FAIL);
+
+	ASSERT(_wicFactory->CreateStream(&pStream));
+	ASSERT(pStream->InitializeFromMemory(reinterpret_cast<BYTE*>(pImageFile), imageFileSize));
+	ASSERT(_wicFactory->CreateDecoderFromStream(pStream, nullptr, WICDecodeMetadataCacheOnLoad, &pDecoder));
+	ASSERT(pDecoder->GetFrame(0, &pSource));
+	ASSERT(_wicFactory->CreateFormatConverter(&pConverter));
+	ASSERT(pConverter->Initialize(pSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.f, WICBitmapPaletteTypeMedianCut));
+	ASSERT(_direct2dRenderTarget->CreateBitmapFromWicBitmap(pConverter, nullptr, &bitmap));
 
 	SafeRelease(&pDecoder);
 	SafeRelease(&pSource);

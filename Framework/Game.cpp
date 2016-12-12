@@ -1,6 +1,30 @@
 #include "Game.h"
 #include "Direct2D.h"
+#include "Scene.h"
 #include <Windows.h>
+#include "Config.h"
+#include INIT_SCENE_HEADER
+
+struct Input {
+	bool _isRightButtonDown;
+	bool _isLeftButtonDown;
+	bool _isMiddleButtonDown;
+	bool _isRightButtonUp;
+	bool _isLeftButtonUp;
+	bool _isMiddleButtonUp;
+	unsigned int _scroll;
+};
+
+struct Game::Impl {
+	Impl();
+	~Impl();
+	Scene* _scene;
+	Input InputBuffer;
+};
+
+Game::Impl::Impl() :_scene(NULL){}
+
+Game::Impl::~Impl(){}
 
 Game * Game::Instance()
 {
@@ -8,34 +32,42 @@ Game * Game::Instance()
 	return &instance;
 }
 
-void Game::FixedUpdate()
+void Game::Initial()
 {
-	if (_scene == NULL) {
-		Direct2D::Instance()->BeginLoad();
-		_scene = new Scene();
-		_scene->OnInitialize();
-		Direct2D::Instance()->EndLoad();
-	}
-	_scene->OnUpdate();
-	Direct2D::Instance()->BeginDraw();
-	_scene->OnDraw();
-	Direct2D::Instance()->EndDraw();
+	ChangeScene(new INIT_SCENE());
 }
 
-void Game::Test()
+void Game::FixedUpdate()
 {
-	//MessageBox(NULL, L"test", L"test", MB_OK);
+	pimpl->_scene->OnUpdate();
+	Direct2D::Instance()->BeginDraw();
+	pimpl->_scene->OnDraw();
+	Direct2D::Instance()->EndDraw();
 }
 
 void Game::Release()
 {
-	_scene->OnClose();
-	delete _scene;
+	if (pimpl->_scene) {
+		pimpl->_scene->OnClose();
+		delete pimpl->_scene;
+	}
 }
 
-Game::Game()
+void Game::ChangeScene(Scene * nextScene)
 {
-	//MessageBox(NULL, L"constructer", L"constructer", MB_OK);
+	if (pimpl->_scene) {
+		pimpl->_scene->OnClose();
+		delete pimpl->_scene;
+	}
+	pimpl->_scene = nextScene;
+	Direct2D::Instance()->BeginLoad();
+	pimpl->_scene->OnInitialize();
+	Direct2D::Instance()->EndLoad();
+}
+
+Game::Game():pimpl(new Impl)
+{
+	//MessageBox(nullptr, L"constructer", L"constructer", MB_OK);
 }
 
 

@@ -17,6 +17,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+void CALLBACK DelayTimer(HWND, UINT, UINT, DWORD);
 void CALLBACK FixedUpdated(HWND, UINT, UINT, DWORD);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -52,7 +53,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_FRAMEWORK));
 
 	MSG msg;
-	SetTimer(NULL, 0, 16, FixedUpdated);
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -136,7 +136,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
-		Game::Instance();
+		SetTimer(hWnd, 0, 16, DelayTimer);
 		break;
 	case WM_COMMAND:
 	{
@@ -156,12 +156,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_PAINT:
-		ValidateRect(hWnd, NULL);
+		ValidateRect(hWnd, nullptr);
 		break;
 	case WM_ERASEBKGND:
 		break;
 	case WM_DESTROY:
 		//Game要比Direct和Audio(還沒做)早釋放，因為載入是他們做的，所以也會叫他們釋放，若Direct和Audio先release，那麼Game去call就會error
+		KillTimer(hWnd, 1);
 		Game::Instance()->Release();
 		PostQuitMessage(0);
 		break;
@@ -191,7 +192,15 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
-void CALLBACK FixedUpdated(HWND hwnd, UINT message, UINT timerID, DWORD time)
+//不知道為什麼，不能馬上最Initial所以用timer delay，wicFactory會建不起來，之後再找原因
+void CALLBACK DelayTimer(HWND hWnd, UINT message, UINT timerID, DWORD time)
+{
+	KillTimer(hWnd, 0);
+	Game::Instance()->Initial();
+	SetTimer(nullptr, 1, 16, FixedUpdated);
+}
+
+void CALLBACK FixedUpdated(HWND hWnd, UINT message, UINT timerID, DWORD time)
 {
 	//MessageBeep(-1);
 	Game::Instance()->FixedUpdate();

@@ -1,18 +1,15 @@
 #pragma once
-#include "Image.h"
 
 class Scene
 {
 public:
 	Scene();
 	~Scene();
-	virtual void OnInitialize();
-	virtual void OnUpdate();
-	virtual void OnDraw();
-	virtual void OnInput();
-	virtual void OnClose();
-private:
-	Image* test;
-	float counter;
-	float step;
+	virtual void OnInitialize() = 0;
+	virtual void OnUpdate() = 0;
+	virtual void OnDraw() = 0;
+	virtual void OnInput() = 0;
+	virtual void OnClose() = 0;
+protected:
+	void GoToScene(Scene* nextScene);
 };

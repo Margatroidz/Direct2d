@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="FrameWork">
+      <UniqueIdentifier>{0acd83cf-9e0b-4846-bd43-77df0ef6a3c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{7cf49e1c-b744-4f6c-9140-d684de3faf0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,34 +33,55 @@
     <ClInclude Include="Framework.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>原始程式檔</Filter>
+    <ClInclude Include="Audio.h">
+      <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="Direct2D.h">
-      <Filter>原始程式檔</Filter>
+      <Filter>FrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>原始程式檔</Filter>
+    <ClInclude Include="Game.h">
+      <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="Image.h">
-      <Filter>原始程式檔</Filter>
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>原始程式檔</Filter>
+    <ClCompile Include="Audio.cpp">
+      <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="Direct2D.cpp">
-      <Filter>原始程式檔</Filter>
+      <Filter>FrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>原始程式檔</Filter>
+    <ClCompile Include="Game.cpp">
+      <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="Image.cpp">
-      <Filter>原始程式檔</Filter>
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

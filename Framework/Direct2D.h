@@ -17,7 +17,8 @@ public:
 	void EndLoad();
 	void BeginDraw();
 	void EndDraw();
-	void Draw(ID2D1Bitmap* _bitmap, float _topLeftX, float _topLeftY);
+	void Rotate(D2D1::Matrix3x2F matrix);
+	void Draw(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity);
 private:
 	Direct2D();
 	~Direct2D();

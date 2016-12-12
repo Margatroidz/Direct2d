@@ -4,26 +4,80 @@
 #include "Image.h"
 #include "Direct2D.h"
 
-void Image::SetPosition(float x, float y)
+Image::Image()
 {
-	_topLeftX = x;
-	_topLeftY = y;
+	_opacity = 1.0;
+	_rotateAngle = 0.0;
+}
+
+void Image::ResetImage()
+{
+	ResetSize();
+	Rotate(0.0);
+}
+
+void Image::SetTopLeftPosition(float x, float y)
+{
+	_topLeft.x = x;
+	_topLeft.y = y;
+}
+
+void Image::Rotate(float angle)
+{
+	_rotateAngle = angle;
 }
 
 void Image::Transfer(float x, float y)
 {
-	_topLeftX += x;
-	_topLeftY += y;
+	_topLeft.x += x;
+	_topLeft.y += y;
+}
+
+void Image::ResetSize()
+{
+	_size.width = _oriSize.width;
+	_size.height = _oriSize.height;
+}
+
+void Image::Resize(float width, float high)
+{
+	_size.width = width;
+	_size.height = high;
+}
+
+void Image::Scale(float scaleX, float scaleY)
+{
+	_size.width *= scaleX;
+	_size.height *= scaleY;
+}
+
+void Image::SetOpacity(float opacity)
+{
+	_opacity = opacity;
+}
+
+void Image::DrawBitmap(ID2D1Bitmap * bitmap)
+{
+	if (_rotateAngle != 0)
+	{
+		D2D1_POINT_2F imageCenter = D2D1::Point2F(_topLeft.x + _size.width / 2, _topLeft.y + _size.height / 2);
+		Direct2D::Instance()->Rotate(D2D1::Matrix3x2F::Rotation(_rotateAngle, imageCenter));
+		Direct2D::Instance()->Draw(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
+		Direct2D::Instance()->Rotate(D2D1::Matrix3x2F::Identity());
+	}
+	else Direct2D::Instance()->Draw(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
 }
 
 Bitmap::Bitmap(char* resourceName)
 {
 	_bitmap = Direct2D::Instance()->LoadBitmap(resourceName);
+	_size = _bitmap->GetSize();
 }
 
 Bitmap::Bitmap(int resourceNumber)
 {
 	_bitmap = Direct2D::Instance()->LoadBitmap(resourceNumber);
+	_size = _bitmap->GetSize();
 }
 
 Bitmap::~Bitmap()
@@ -33,18 +87,20 @@ Bitmap::~Bitmap()
 
 void Bitmap::Draw()
 {
-	Direct2D::Instance()->Draw(_bitmap, _topLeftX, _topLeftY);
+	DrawBitmap(_bitmap);
 }
 
 Animation::Animation(char** resourceName, int number, float interval) : _interval((int)(60.0 * interval)), _counter(0)
 {
-	//陣列預留一個位置放NULL，判斷animation的結尾
+	//陣列預留一個位置放null，判斷animation的結尾
 	_bitmaps = new ID2D1Bitmap*[number + 1];
 	for (int i = 0; i < number; i++) {
 		_bitmaps[i] = Direct2D::Instance()->LoadBitmap(resourceName[i]);
 	}
-	_bitmaps[number] = NULL;
+	_bitmaps[number] = nullptr;
 	_bitmap = _bitmaps;
+	_oriSize = (*_bitmap)->GetSize();
+	_size = (*_bitmap)->GetSize();
 }
 
 Animation::Animation(int * resourceNumber, int number, float interval) : _interval((int)(60.0 * interval)), _counter(0)
@@ -53,8 +109,10 @@ Animation::Animation(int * resourceNumber, int number, float interval) : _interv
 	for (int i = 0; i < number; i++) {
 		_bitmaps[i] = Direct2D::Instance()->LoadBitmap(resourceNumber[i]);
 	}
-	_bitmaps[number] = NULL;
+	_bitmaps[number] = nullptr;
 	_bitmap = _bitmaps;
+	_oriSize = (*_bitmap)->GetSize();
+	_size = (*_bitmap)->GetSize();
 }
 
 Animation::~Animation()
@@ -68,9 +126,16 @@ Animation::~Animation()
 void Animation::Draw()
 {
 	if (++_counter >= _interval) {
-		//判斷下一個pointer是否為NULL，如果為NULL則將圖片切到第一張
+		//判斷下一個pointer是否為null，如果為null則將圖片切到第一張
 		if (!*(++_bitmap)) _bitmap = _bitmaps;
 		_counter = 0;
 	}
-	Direct2D::Instance()->Draw(*_bitmap, _topLeftX, _topLeftY);
+	DrawBitmap(*_bitmap);
+}
+
+void Animation::ResetImage()
+{
+	Image::ResetImage();
+	_bitmap = _bitmaps;
+	_counter = 0;
 }
