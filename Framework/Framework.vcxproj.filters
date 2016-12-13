@@ -60,6 +60,9 @@
     <ClInclude Include="GameLib.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="GameLib.cpp">
       <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>FrameWork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

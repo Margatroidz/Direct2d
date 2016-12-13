@@ -111,13 +111,13 @@ void Direct2D::DrawTextD(char* text, IDWriteTextFormat* format, ID2D1Brush* brus
 	int length = strlen(text);
 	wchar_t* t = new wchar_t[length];
 	mbstowcs_s(0, t, length, text, _TRUNCATE);
-	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(0, 0, 200, 50), brush);
+	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(200, 200, 400, 400), brush);
 	delete[] t;
 }
 
 void Direct2D::Test()
 {
-	static const WCHAR msc_fontName[] = L"Verdana";
+	static const WCHAR msc_fontName[] = L"Gabriola";
 	static const FLOAT msc_fontSize = 50;
 	IDWriteFactory* m_pDWriteFactory = NULL;
 	IDWriteTextFormat* m_pTextFormat;
@@ -130,22 +130,21 @@ void Direct2D::Test()
 	m_pDWriteFactory->CreateTextFormat(
 		msc_fontName,
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_REGULAR,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		msc_fontSize,
-		L"", //locale
+		L"en-us",
 		&m_pTextFormat
 	);
 	m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-	ID2D1Brush* brush = nullptr;
+	ID2D1SolidColorBrush* brush = nullptr;
 
-	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black),
-		reinterpret_cast<ID2D1SolidColorBrush**>(&brush));
+	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &brush);
 
-	DrawTextD("Hello World !", m_pTextFormat, brush);
+	DrawTextD("Hello Horld !", m_pTextFormat, brush);
 
 	SafeRelease(&m_pDWriteFactory);
 	SafeRelease(&m_pTextFormat);
