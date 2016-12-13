@@ -15,14 +15,20 @@ struct Input {
 	unsigned int _scroll;
 };
 
+enum SceneState{
+	uninitialized,
+	run
+};
+
 struct Game::Impl {
 	Impl();
 	~Impl();
 	Scene* _scene;
-	Input InputBuffer;
+	SceneState _sceneState;
+	Input _inputBuffer;
 };
 
-Game::Impl::Impl() :_scene(NULL){}
+Game::Impl::Impl() :_scene(nullptr){}
 
 Game::Impl::~Impl(){}
 
@@ -39,10 +45,12 @@ void Game::Initial()
 
 void Game::FixedUpdate()
 {
-	pimpl->_scene->OnUpdate();
-	Direct2D::Instance()->BeginDraw();
-	pimpl->_scene->OnDraw();
-	Direct2D::Instance()->EndDraw();
+	if (pimpl->_sceneState) {
+		pimpl->_scene->OnUpdate();
+		Direct2D::Instance()->BeginDraw();
+		pimpl->_scene->OnDraw();
+		Direct2D::Instance()->EndDraw();
+	}
 }
 
 void Game::Release()
@@ -60,13 +68,16 @@ void Game::ChangeScene(Scene * nextScene)
 		delete pimpl->_scene;
 	}
 	pimpl->_scene = nextScene;
+	pimpl->_sceneState = uninitialized;
 	Direct2D::Instance()->BeginLoad();
 	pimpl->_scene->OnInitialize();
 	Direct2D::Instance()->EndLoad();
+	pimpl->_sceneState = run;
 }
 
 Game::Game():pimpl(new Impl)
 {
+	pimpl->_sceneState = uninitialized;
 	//MessageBox(nullptr, L"constructer", L"constructer", MB_OK);
 }
 

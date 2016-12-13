@@ -1,19 +1,17 @@
 #pragma once
 #include "Scene.h"
-#include "Image.h"
+#include <memory>
 
 class TestScene : public Scene
 {
 public:
 	TestScene();
-	~TestScene();
 	void OnInitialize();
 	void OnUpdate();
 	void OnDraw();
 	void OnInput();
 	void OnClose();
 private:
-	Image* test;
-	int counter;
-	int step;
+	struct impl;
+	std::unique_ptr<impl> pimpl;
 };

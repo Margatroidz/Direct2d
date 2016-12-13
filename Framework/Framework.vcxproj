@@ -152,6 +152,7 @@
     <ClInclude Include="Direct2D.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLib.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="Resource.h" />
@@ -164,9 +165,9 @@
     <ClCompile Include="Direct2D.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLib.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="MenuScene.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>

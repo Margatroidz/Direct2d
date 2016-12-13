@@ -3,6 +3,7 @@
 
 #include "Framework.h"
 #include "Game.h"
+#include "Config.h"
 #include "Direct2D.h"
 
 #define MAX_LOADSTRING 100
@@ -113,6 +114,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		return FALSE;
 	}
+
+	SetWindowPos(hWnd, HWND_TOP, 0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, SWP_NOMOVE);
+
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);

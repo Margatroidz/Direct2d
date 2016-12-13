@@ -62,10 +62,10 @@ void Image::DrawBitmap(ID2D1Bitmap * bitmap)
 	{
 		D2D1_POINT_2F imageCenter = D2D1::Point2F(_topLeft.x + _size.width / 2, _topLeft.y + _size.height / 2);
 		Direct2D::Instance()->Rotate(D2D1::Matrix3x2F::Rotation(_rotateAngle, imageCenter));
-		Direct2D::Instance()->Draw(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
+		Direct2D::Instance()->DrawBitmap(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
 		Direct2D::Instance()->Rotate(D2D1::Matrix3x2F::Identity());
 	}
-	else Direct2D::Instance()->Draw(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
+	else Direct2D::Instance()->DrawBitmap(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
 }
 
 Bitmap::Bitmap(char* resourceName)

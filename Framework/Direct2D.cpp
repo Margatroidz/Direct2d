@@ -1,10 +1,11 @@
 #pragma comment(lib, "d2d1")
+#pragma comment(lib, "dwrite")
 #pragma comment(lib, "windowscodecs")
 #include "Direct2D.h"
 #include <windows.h>
 #include <wincodec.h>
 #include <memory>
-#include "Image.h"
+#include <dwrite.h>
 #define ASSERT(hr) if(!SUCCEEDED(hr)){ throw hr; }
 
 template<class Interface>
@@ -97,12 +98,58 @@ void Direct2D::Rotate(D2D1::Matrix3x2F matrix)
 	_direct2dRenderTarget->SetTransform(matrix);
 }
 
-void Direct2D::Draw(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity)
+void Direct2D::DrawBitmap(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity)
 {
 	if (!_bitmap) throw L"nullptr Image !";
 
 	D2D1_SIZE_F size = _bitmap->GetSize();
 	_direct2dRenderTarget->DrawBitmap(_bitmap, rect, opacity);
+}
+
+void Direct2D::DrawTextD(char* text, IDWriteTextFormat* format, ID2D1Brush* brush)
+{
+	int length = strlen(text);
+	wchar_t* t = new wchar_t[length];
+	mbstowcs_s(0, t, length, text, _TRUNCATE);
+	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(0, 0, 200, 50), brush);
+	delete[] t;
+}
+
+void Direct2D::Test()
+{
+	static const WCHAR msc_fontName[] = L"Verdana";
+	static const FLOAT msc_fontSize = 50;
+	IDWriteFactory* m_pDWriteFactory = NULL;
+	IDWriteTextFormat* m_pTextFormat;
+
+	DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(m_pDWriteFactory),
+		reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+	);
+	m_pDWriteFactory->CreateTextFormat(
+		msc_fontName,
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		msc_fontSize,
+		L"", //locale
+		&m_pTextFormat
+	);
+	m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+	ID2D1Brush* brush = nullptr;
+
+	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black),
+		reinterpret_cast<ID2D1SolidColorBrush**>(&brush));
+
+	DrawTextD("Hello World !", m_pTextFormat, brush);
+
+	SafeRelease(&m_pDWriteFactory);
+	SafeRelease(&m_pTextFormat);
+	SafeRelease(&brush);
 }
 
 ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
