@@ -109,13 +109,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // 將執行個體控制代碼儲存在全域變數中
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+		0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, nullptr, nullptr, hInstance, nullptr);
 	if (!hWnd)
 	{
 		return FALSE;
 	}
 
-	SetWindowPos(hWnd, HWND_TOP, 0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, SWP_NOMOVE);
+	//SetWindowPos(hWnd, HWND_TOP, 0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, SWP_NOMOVE);
 
 
 	ShowWindow(hWnd, nCmdShow);
@@ -141,6 +141,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
 		SetTimer(hWnd, 0, 16, DelayTimer);
+		break;
+	case WM_KEYDOWN:
+	{
+		int i = wParam;
+		wchar_t buffer[256];
+		wsprintf(buffer, L"%d", i);
+		MessageBox(hWnd, buffer, buffer, MB_OK);
+	}
+		break;
+	case WM_KEYUP:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_MOUSEMOVE:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_RBUTTONDOWN:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_LBUTTONDOWN:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_RBUTTONUP:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_LBUTTONUP:
+		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_COMMAND:
 	{

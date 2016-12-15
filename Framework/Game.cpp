@@ -6,6 +6,8 @@
 #include INIT_SCENE_HEADER
 
 struct Input {
+	bool _iskeyDown[256];
+	bool _iskeyUp[256];
 	bool _isRightButtonDown;
 	bool _isLeftButtonDown;
 	bool _isMiddleButtonDown;
@@ -78,6 +80,11 @@ void Game::ChangeScene(Scene * nextScene)
 Game::Game():pimpl(new Impl)
 {
 	pimpl->_sceneState = uninitialized;
+
+	int i = sizeof(Input);
+	wchar_t buffer[256];
+	wsprintf(buffer, L"%d", i);
+	MessageBox(nullptr, buffer, buffer, MB_OK);
 	//MessageBox(nullptr, L"constructer", L"constructer", MB_OK);
 }
 

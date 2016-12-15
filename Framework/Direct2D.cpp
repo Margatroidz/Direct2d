@@ -108,10 +108,11 @@ void Direct2D::DrawBitmap(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity)
 
 void Direct2D::DrawTextD(char* text, IDWriteTextFormat* format, ID2D1Brush* brush)
 {
-	int length = strlen(text);
+	//我也不懂為甚麼len要+1，但他就是會work(沒有+1最後一個字元會被吃掉)
+	int length = strlen(text) + 1;
 	wchar_t* t = new wchar_t[length];
 	mbstowcs_s(0, t, length, text, _TRUNCATE);
-	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(200, 200, 400, 400), brush);
+	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(0, 0, 400, 400), brush);
 	delete[] t;
 }
 
@@ -144,7 +145,7 @@ void Direct2D::Test()
 
 	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &brush);
 
-	DrawTextD("Hello Horld !", m_pTextFormat, brush);
+	DrawTextD("Hello\nWorld !", m_pTextFormat, brush);
 
 	SafeRelease(&m_pDWriteFactory);
 	SafeRelease(&m_pTextFormat);
