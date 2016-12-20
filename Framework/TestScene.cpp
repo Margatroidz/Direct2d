@@ -36,10 +36,6 @@ void TestScene::OnDraw()
 	pimpl->test->Draw();
 }
 
-void TestScene::OnInput()
-{
-}
-
 void TestScene::OnClose()
 {
 	delete pimpl->test;

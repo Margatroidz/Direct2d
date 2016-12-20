@@ -34,10 +34,6 @@ void MenuScene::OnDraw()
 	Direct2D::Instance()->Test();
 }
 
-void MenuScene::OnInput()
-{
-}
-
 void MenuScene::OnClose()
 {
 	//delete pimpl->test;

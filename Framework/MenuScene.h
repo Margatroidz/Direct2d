@@ -9,7 +9,6 @@ public:
 	void OnInitialize();
 	void OnUpdate();
 	void OnDraw();
-	void OnInput();
 	void OnClose();
 private:
 	struct impl;
