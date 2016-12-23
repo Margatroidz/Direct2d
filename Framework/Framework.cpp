@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Config.h"
 #include "Direct2D.h"
+#include <Windowsx.h>
 
 #define MAX_LOADSTRING 100
 namespace {
@@ -144,29 +145,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 	{
-		int i = wParam;
-		wchar_t buffer[256];
-		wsprintf(buffer, L"%d", i);
-		MessageBox(hWnd, buffer, buffer, MB_OK);
+		unsigned int i = wParam;
+		Game::Instance()->KeyDown(i);
+		//wchar_t buffer[256];
+		//wsprintf(buffer, L"%d", i);
+		//MessageBox(hWnd, buffer, buffer, MB_OK);
 	}
-		break;
+	break;
 	case WM_KEYUP:
+	{
+		unsigned int i = wParam;
+		Game::Instance()->KeyUp(i);
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
-		break;
+	}
+	break;
 	case WM_MOUSEMOVE:
-		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		Game::Instance()->SetMousePosition(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_RBUTTONDOWN:
+		Game::Instance()->RButtonDown();
+		//MessageBox(nullptr, L"WM_RBUTTONDOWN", L"WM_RBUTTONDOWN", MB_OK);
+		break;
+	case WM_RBUTTONUP:
+		Game::Instance()->RButtonUp();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_LBUTTONDOWN:
-		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
-		break;
-	case WM_RBUTTONUP:
+		Game::Instance()->LButtonDown();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_LBUTTONUP:
+		Game::Instance()->LButtonUp();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
+		break;
+	case WM_MBUTTONDOWN:
+		Game::Instance()->MButtonDown();
+		break;
+	case WM_MBUTTONUP:
+		Game::Instance()->MButtonUp();
 		break;
 	case WM_COMMAND:
 	{

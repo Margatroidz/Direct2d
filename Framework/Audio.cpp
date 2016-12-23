@@ -1,7 +1,7 @@
 #include "Audio.h"
 #include <xaudio2.h>
 
-struct Audio::impl
+struct Audio::Impl
 {
 	//IXAudio2* _engine;
 	//IXAudio2MasteringVoice* _voice;

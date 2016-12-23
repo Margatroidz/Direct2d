@@ -2,7 +2,6 @@
 #pragma comment(lib, "dwrite")
 #pragma comment(lib, "windowscodecs")
 #include "Direct2D.h"
-#include <windows.h>
 #include <wincodec.h>
 #include <memory>
 #include <dwrite.h>
@@ -57,14 +56,14 @@ HRESULT Direct2D::CreateDirect2dDevice(HWND hwnd)
 	return hr;
 }
 
-ID2D1Bitmap* Direct2D::LoadBitmap(int resourceNumber)
+ID2D1Bitmap* Direct2D::LoadBitmapD(int resourceNumber)
 {
-	return LoadBitmap(MAKEINTRESOURCE(resourceNumber));
+	return LoadBitmapD(MAKEINTRESOURCE(resourceNumber));
 }
 
-ID2D1Bitmap* Direct2D::LoadBitmap(char* resourceName)
+ID2D1Bitmap* Direct2D::LoadBitmapD(char* resourceName)
 {
-	return LoadBitmap((WCHAR*)resourceName);;
+	return LoadBitmapD((WCHAR*)resourceName);;
 }
 
 void Direct2D::DestroyBitmap(ID2D1Bitmap* image)
@@ -106,53 +105,76 @@ void Direct2D::DrawBitmap(ID2D1Bitmap* _bitmap, D2D1_RECT_F rect, float opacity)
 	_direct2dRenderTarget->DrawBitmap(_bitmap, rect, opacity);
 }
 
-void Direct2D::DrawTextD(char* text, IDWriteTextFormat* format, ID2D1Brush* brush)
+void Direct2D::DrawTextD(wchar_t* text, IDWriteTextFormat* format, ID2D1Brush* brush)
 {
-	//我也不懂為甚麼len要+1，但他就是會work(沒有+1最後一個字元會被吃掉)
-	int length = strlen(text) + 1;
-	wchar_t* t = new wchar_t[length];
-	mbstowcs_s(0, t, length, text, _TRUNCATE);
-	_direct2dRenderTarget->DrawTextW(t, length, format, D2D1::RectF(0, 0, 400, 400), brush);
-	delete[] t;
+	_direct2dRenderTarget->DrawTextW(text, wcslen(text) + 1, format, D2D1::RectF(0, 0, 400, 400), brush);
 }
 
-void Direct2D::Test()
+void Direct2D::DestroyText(IDWriteTextFormat * format, ID2D1Brush * brush)
 {
-	static const WCHAR msc_fontName[] = L"Gabriola";
-	static const FLOAT msc_fontSize = 50;
-	IDWriteFactory* m_pDWriteFactory = NULL;
-	IDWriteTextFormat* m_pTextFormat;
-
-	DWriteCreateFactory(
-		DWRITE_FACTORY_TYPE_SHARED,
-		__uuidof(m_pDWriteFactory),
-		reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-	);
-	m_pDWriteFactory->CreateTextFormat(
-		msc_fontName,
-		NULL,
-		DWRITE_FONT_WEIGHT_REGULAR,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		msc_fontSize,
-		L"en-us",
-		&m_pTextFormat
-	);
-	m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-
-	ID2D1SolidColorBrush* brush = nullptr;
-
-	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &brush);
-
-	DrawTextD("Hello\nWorld !", m_pTextFormat, brush);
-
-	SafeRelease(&m_pDWriteFactory);
-	SafeRelease(&m_pTextFormat);
+	SafeRelease(&format);
 	SafeRelease(&brush);
 }
 
-ID2D1Bitmap* Direct2D::LoadBitmap(PCWSTR resourceName)
+IDWriteTextFormat* Direct2D::CreateTextFormat(char * format, int size)
+{
+	int length = strlen(format) + 1;
+	wchar_t* wFormat = new wchar_t[length];
+	mbstowcs_s(0, wFormat, length, format, _TRUNCATE);
+
+	IDWriteFactory* factory = nullptr;
+	IDWriteTextFormat* result = nullptr;
+	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(factory), reinterpret_cast<IUnknown **>(&factory));
+	factory->CreateTextFormat(wFormat, nullptr, DWRITE_FONT_WEIGHT_REGULAR, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, size, L"en-us", &result);
+	result->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	result->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	return result;
+}
+
+ID2D1SolidColorBrush * Direct2D::CreateBrush()
+{
+	ID2D1SolidColorBrush* result = nullptr;
+	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &result);
+	return result;
+}
+//
+//void Direct2D::Test()
+//{
+//	static const WCHAR msc_fontName[] = L"Gabriola";
+//	static const FLOAT msc_fontSize = 50;
+//	IDWriteFactory* m_pDWriteFactory = NULL;
+//	IDWriteTextFormat* m_pTextFormat;
+//
+//	DWriteCreateFactory(
+//		DWRITE_FACTORY_TYPE_SHARED,
+//		__uuidof(m_pDWriteFactory),
+//		reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+//	);
+//	m_pDWriteFactory->CreateTextFormat(
+//		msc_fontName,
+//		NULL,
+//		DWRITE_FONT_WEIGHT_REGULAR,
+//		DWRITE_FONT_STYLE_NORMAL,
+//		DWRITE_FONT_STRETCH_NORMAL,
+//		msc_fontSize,
+//		L"en-us",
+//		&m_pTextFormat
+//	);
+//	m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+//	m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+//
+//	ID2D1SolidColorBrush* brush = nullptr;
+//
+//	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &brush);
+//
+//	DrawTextD("Hello\nWorld !", m_pTextFormat, brush);
+//
+//	SafeRelease(&m_pDWriteFactory);
+//	SafeRelease(&m_pTextFormat);
+//	SafeRelease(&brush);
+//}
+
+ID2D1Bitmap* Direct2D::LoadBitmapD(PCWSTR resourceName)
 {
 	ID2D1Bitmap* bitmap = nullptr;
 	IWICBitmapDecoder* pDecoder = nullptr;

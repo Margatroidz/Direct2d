@@ -1,38 +1,35 @@
 #include "Game.h"
 #include "Direct2D.h"
 #include "Scene.h"
-#include <Windows.h>
 #include "Config.h"
 #include INIT_SCENE_HEADER
 
 struct Input {
-	bool _iskeyDown[256];
-	bool _iskeyUp[256];
-	bool _isRightButtonDown;
-	bool _isLeftButtonDown;
-	bool _isMiddleButtonDown;
-	bool _isRightButtonUp;
-	bool _isLeftButtonUp;
-	bool _isMiddleButtonUp;
+	unsigned int _isKeyDown[256];
+	unsigned int _isKeyUp[256];
+	unsigned int _isRightButtonDown;
+	unsigned int _isLeftButtonDown;
+	unsigned int _isMiddleButtonDown;
+	unsigned int _isRightButtonUp;
+	unsigned int _isLeftButtonUp;
+	unsigned int _isMiddleButtonUp;
 	unsigned int _scroll;
-};
-
-enum SceneState{
-	uninitialized,
-	run
+	int _mousePositionX;
+	int _mousePositionY;
 };
 
 struct Game::Impl {
 	Impl();
 	~Impl();
 	Scene* _scene;
-	SceneState _sceneState;
 	Input _inputBuffer;
 };
 
-Game::Impl::Impl() :_scene(nullptr){}
 
-Game::Impl::~Impl(){}
+
+Game::Impl::Impl() :_scene(nullptr) {}
+
+Game::Impl::~Impl() {}
 
 Game * Game::Instance()
 {
@@ -47,12 +44,11 @@ void Game::Initial()
 
 void Game::FixedUpdate()
 {
-	if (pimpl->_sceneState) {
-		pimpl->_scene->OnUpdate();
-		Direct2D::Instance()->BeginDraw();
-		pimpl->_scene->OnDraw();
-		Direct2D::Instance()->EndDraw();
-	}
+	pimpl->_scene->OnUpdate();
+	memset(&pimpl->_inputBuffer, 0, sizeof(Input));
+	Direct2D::Instance()->BeginDraw();
+	pimpl->_scene->OnDraw();
+	Direct2D::Instance()->EndDraw();
 }
 
 void Game::Release()
@@ -70,24 +66,105 @@ void Game::ChangeScene(Scene * nextScene)
 		delete pimpl->_scene;
 	}
 	pimpl->_scene = nextScene;
-	pimpl->_sceneState = uninitialized;
 	Direct2D::Instance()->BeginLoad();
 	pimpl->_scene->OnInitialize();
 	Direct2D::Instance()->EndLoad();
-	pimpl->_sceneState = run;
 }
 
-Game::Game():pimpl(new Impl)
+#pragma region InputMethod
+void Game::KeyDown(unsigned int key)
 {
-	pimpl->_sceneState = uninitialized;
+	pimpl->_inputBuffer._isKeyDown[key]++;
+}
+void Game::KeyUp(unsigned int key)
+{
+	pimpl->_inputBuffer._isKeyUp[key]++;
+}
+void Game::SetMousePosition(int x, int y)
+{
+	pimpl->_inputBuffer._mousePositionX = x;
+	pimpl->_inputBuffer._mousePositionY = y;
+}
+void Game::LButtonDown()
+{
+	pimpl->_inputBuffer._isLeftButtonDown++;
+}
+void Game::MButtonDown()
+{
+	pimpl->_inputBuffer._isMiddleButtonDown++;
+}
+void Game::RButtonDown()
+{
+	pimpl->_inputBuffer._isRightButtonDown++;
+}
+void Game::LButtonUp()
+{
+	pimpl->_inputBuffer._isLeftButtonUp++;
+}
+void Game::MButtonUp()
+{
+	pimpl->_inputBuffer._isMiddleButtonUp++;
+}
+void Game::RButtonUp()
+{
+	pimpl->_inputBuffer._isRightButtonUp++;
+}
 
-	int i = sizeof(Input);
-	wchar_t buffer[256];
-	wsprintf(buffer, L"%d", i);
-	MessageBox(nullptr, buffer, buffer, MB_OK);
+
+unsigned int Game::GetKeyDown(unsigned int key)
+{
+	return pimpl->_inputBuffer._isKeyDown[key];
+}
+
+unsigned int Game::GetKeyUp(unsigned int key)
+{
+	return pimpl->_inputBuffer._isKeyUp[key];
+}
+
+int Game::GetMousePositionX()
+{
+	return pimpl->_inputBuffer._mousePositionX;
+}
+
+int Game::GetMousePositionY()
+{
+	return pimpl->_inputBuffer._mousePositionY;
+}
+unsigned int Game::IsLButtonDown()
+{
+	return pimpl->_inputBuffer._isLeftButtonDown;
+}
+unsigned int Game::IsMButtonDown()
+{
+	return pimpl->_inputBuffer._isMiddleButtonDown;
+}
+unsigned int Game::IsRButtonDown()
+{
+	return pimpl->_inputBuffer._isRightButtonDown;
+}
+unsigned int Game::IsLButtonUp()
+{
+	return pimpl->_inputBuffer._isLeftButtonUp;
+}
+unsigned int Game::IsMButtonUp()
+{
+	return pimpl->_inputBuffer._isMiddleButtonUp;
+}
+unsigned int Game::IsRButtonUp()
+{
+	return pimpl->_inputBuffer._isRightButtonUp;
+}
+#pragma endregion
+
+
+Game::Game() :pimpl(new Impl)
+{
+	memset(&pimpl->_inputBuffer, 0, sizeof(Input));
+	//int i = sizeof(Input);
+	//wchar_t buffer[256];
+	//wsprintf(buffer, L"%d", i);
 	//MessageBox(nullptr, L"constructer", L"constructer", MB_OK);
 }
-
 
 Game::~Game()
 {

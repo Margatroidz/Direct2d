@@ -1,6 +1,5 @@
 #pragma once
 #include <d2dbasetypes.h>
-
 struct ID2D1Bitmap;
 
 class Image

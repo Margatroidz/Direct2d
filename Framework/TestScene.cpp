@@ -2,13 +2,13 @@
 #include "TestScene.h"
 #include "GameLib.h"
 
-struct TestScene::impl {
+struct TestScene::Impl {
 	Image* test;
 	int counter;
 	float step;
 };
 
-TestScene::TestScene() :pimpl(new impl) {}
+TestScene::TestScene() :pimpl(new Impl) {}
 
 void TestScene::OnInitialize()
 {

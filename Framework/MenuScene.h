@@ -11,6 +11,6 @@ public:
 	void OnDraw();
 	void OnClose();
 private:
-	struct impl;
-	std::unique_ptr<impl> pimpl;
+	struct Impl;
+	std::unique_ptr<Impl> pimpl;
 };

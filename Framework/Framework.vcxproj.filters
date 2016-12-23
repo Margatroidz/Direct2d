@@ -86,10 +86,10 @@
     <ClCompile Include="MenuScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameLib.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLib.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
   </ItemGroup>
