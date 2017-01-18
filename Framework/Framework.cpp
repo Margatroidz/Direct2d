@@ -174,9 +174,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONUP:
 		Game::Instance()->MiddleMouseUp();
 		break;
-	case WM_SWITCH_SCENE:
-		Game::Instance()->SwitchScene();
-		break;
 	case WM_CREATE:
 		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
 		SetTimer(hWnd, 0, 16, DelayTimer);
@@ -239,7 +236,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 void CALLBACK DelayTimer(HWND hWnd, UINT message, UINT timerID, DWORD time)
 {
 	KillTimer(hWnd, 0);
-	Game::Instance()->Initial((unsigned int)hWnd);
+	Game::Instance()->Initial();
 	SetTimer(nullptr, 1, 16, FixedUpdated);
 }
 

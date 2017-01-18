@@ -8,11 +8,10 @@ public:
 	Game(const Game&) = delete;
 	Game& operator=(const Game&) = delete;
 	static Game* Instance();
-	void Initial(unsigned int hWnd);
+	void Initial();
 	void FixedUpdate();
 	void Release();
-	void GoToScene(Scene* nextScene);
-	void SwitchScene();
+	void ChangeScene(Scene* nextScene);
 
 #pragma region InputMethod
 	void KeyDown(unsigned int key);
@@ -42,8 +41,4 @@ private:
 	std::unique_ptr<Impl> pimpl;
 	Game();
 	~Game();
-	void CreateScene();
-	void DestoryScene();
-	void ShutDownThread();
-	void GameLoop();
 };

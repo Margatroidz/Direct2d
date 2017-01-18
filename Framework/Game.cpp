@@ -7,12 +7,12 @@
 struct Input {
 	unsigned int _isKeyDown[256];
 	unsigned int _isKeyUp[256];
-	unsigned int _isRightMouseDown;
-	unsigned int _isLeftMouseDown;
-	unsigned int _isMiddleMouseDown;
-	unsigned int _isRightMouseUp;
-	unsigned int _isLeftMouseUp;
-	unsigned int _isMiddleMouseUp;
+	unsigned int _isRightButtonDown;
+	unsigned int _isLeftButtonDown;
+	unsigned int _isMiddleButtonDown;
+	unsigned int _isRightButtonUp;
+	unsigned int _isLeftButtonUp;
+	unsigned int _isMiddleButtonUp;
 	unsigned int _scroll;
 	int _mousePositionX;
 	int _mousePositionY;
@@ -21,13 +21,12 @@ struct Input {
 struct Game::Impl {
 	Impl();
 	~Impl();
-	HWND _hWnd;
-	HANDLE _gameThread;
 	Scene* _scene;
-	Scene* _nextScene;
 	Input _inputBuffer;
 };
-Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr), _gameThread(nullptr) {}
+
+Game::Impl::Impl() :_scene(nullptr) {}
+
 Game::Impl::~Impl() {}
 
 Game * Game::Instance()
@@ -36,10 +35,9 @@ Game * Game::Instance()
 	return &instance;
 }
 
-void Game::Initial(unsigned int hWnd)
+void Game::Initial()
 {
-	pimpl->_hWnd = (HWND)hWnd;
-	GoToScene(new INIT_SCENE());
+	ChangeScene(new INIT_SCENE());
 }
 
 void Game::FixedUpdate()
@@ -53,52 +51,22 @@ void Game::FixedUpdate()
 
 void Game::Release()
 {
-	if (pimpl->_gameThread) ShutDownThread();
-	if (pimpl->_scene) DestoryScene();
+	if (pimpl->_scene) {
+		pimpl->_scene->OnClose();
+		delete pimpl->_scene;
+	}
 }
 
-void Game::GoToScene(Scene * nextScene)
+void Game::ChangeScene(Scene * nextScene)
 {
-	pimpl->_nextScene = nextScene;
-	PostMessage(pimpl->_hWnd, WM_SWITCH_SCENE, (WPARAM)0, (LPARAM)0);
-}
-
-void Game::SwitchScene()
-{
-	if (pimpl->_gameThread) ShutDownThread();
-	if (pimpl->_scene) DestoryScene();
-	if (pimpl->_nextScene) CreateScene();
-}
-
-void Game::CreateScene()
-{
-	pimpl->_scene = pimpl->_nextScene;
-
-}
-
-void Game::DestoryScene()
-{
-	pimpl->_scene->OnClose();
-	delete pimpl->_scene;
-}
-
-void Game::ShutDownThread()
-{
-}
-
-//遊戲主迴圈，會在CreateScene時建立新的thread執行該function
-void Game::GameLoop()
-{
+	if (pimpl->_scene) {
+		pimpl->_scene->OnClose();
+		delete pimpl->_scene;
+	}
+	pimpl->_scene = nextScene;
 	Direct2D::Instance()->BeginLoad();
 	pimpl->_scene->OnInitialize();
 	Direct2D::Instance()->EndLoad();
-	while (true) {
-		pimpl->_scene->OnUpdate();
-		memset(&pimpl->_inputBuffer, 0, sizeof(Input));
-		Direct2D::Instance()->BeginDraw();
-		pimpl->_scene->OnDraw();
-		Direct2D::Instance()->EndDraw();
-	}
 }
 
 #pragma region InputMethod
@@ -117,27 +85,27 @@ void Game::SetMousePosition(int x, int y)
 }
 void Game::LeftMouseDown()
 {
-	pimpl->_inputBuffer._isLeftMouseDown++;
+	pimpl->_inputBuffer._isLeftButtonDown++;
 }
 void Game::MiddleMouseDown()
 {
-	pimpl->_inputBuffer._isMiddleMouseDown++;
+	pimpl->_inputBuffer._isMiddleButtonDown++;
 }
 void Game::RightMouseDown()
 {
-	pimpl->_inputBuffer._isRightMouseDown++;
+	pimpl->_inputBuffer._isRightButtonDown++;
 }
 void Game::LeftMouseUp()
 {
-	pimpl->_inputBuffer._isLeftMouseUp++;
+	pimpl->_inputBuffer._isLeftButtonUp++;
 }
 void Game::MiddleMouseUp()
 {
-	pimpl->_inputBuffer._isMiddleMouseUp++;
+	pimpl->_inputBuffer._isMiddleButtonUp++;
 }
 void Game::RightMouseUp()
 {
-	pimpl->_inputBuffer._isRightMouseUp++;
+	pimpl->_inputBuffer._isRightButtonUp++;
 }
 
 
@@ -162,27 +130,27 @@ int Game::GetMousePositionY()
 }
 unsigned int Game::GetLeftMouseDown()
 {
-	return pimpl->_inputBuffer._isLeftMouseDown;
+	return pimpl->_inputBuffer._isLeftButtonDown;
 }
 unsigned int Game::GetMiddleMouseDown()
 {
-	return pimpl->_inputBuffer._isMiddleMouseDown;
+	return pimpl->_inputBuffer._isMiddleButtonDown;
 }
 unsigned int Game::GetRightMouseDown()
 {
-	return pimpl->_inputBuffer._isRightMouseDown;
+	return pimpl->_inputBuffer._isRightButtonDown;
 }
 unsigned int Game::GetLeftMouseUp()
 {
-	return pimpl->_inputBuffer._isLeftMouseUp;
+	return pimpl->_inputBuffer._isLeftButtonUp;
 }
 unsigned int Game::GetMiddleMouseUp()
 {
-	return pimpl->_inputBuffer._isMiddleMouseUp;
+	return pimpl->_inputBuffer._isMiddleButtonUp;
 }
 unsigned int Game::GetRightMouseUp()
 {
-	return pimpl->_inputBuffer._isRightMouseUp;
+	return pimpl->_inputBuffer._isRightButtonUp;
 }
 #pragma endregion
 

@@ -25,15 +25,9 @@ void MenuScene::OnUpdate()
 	if (c >= 180) {
 		GoToScene(new TestScene());
 		return;
-<<<<<<< HEAD
-	}*/
-	if (Game::Instance()->GetLeftMouseDown()) pimpl->test->Transfer(-5, 0);
-	if (Game::Instance()->GetRightMouseDown()) pimpl->test->Transfer(5, 0);
-=======
 	}
 	//if (Game::Instance()->GetLeftMouseDown()) pimpl->test->Transfer(-5, 0);
 	//if (Game::Instance()->GetRightMouseDown()) pimpl->test->Transfer(5, 0);
->>>>>>> origin/master
 }
 
 void MenuScene::OnDraw()
