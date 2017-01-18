@@ -163,26 +163,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		Game::Instance()->SetMousePosition(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_RBUTTONDOWN:
-		Game::Instance()->RButtonDown();
+		Game::Instance()->RightMouseDown();
 		//MessageBox(nullptr, L"WM_RBUTTONDOWN", L"WM_RBUTTONDOWN", MB_OK);
 		break;
 	case WM_RBUTTONUP:
-		Game::Instance()->RButtonUp();
+		Game::Instance()->RightMouseUp();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_LBUTTONDOWN:
-		Game::Instance()->LButtonDown();
+		Game::Instance()->LeftMouseDown();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_LBUTTONUP:
-		Game::Instance()->LButtonUp();
+		Game::Instance()->LeftMouseUp();
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
 		break;
 	case WM_MBUTTONDOWN:
-		Game::Instance()->MButtonDown();
+		Game::Instance()->MiddleMouseDown();
 		break;
 	case WM_MBUTTONUP:
-		Game::Instance()->MButtonUp();
+		Game::Instance()->MiddleMouseUp();
 		break;
 	case WM_COMMAND:
 	{

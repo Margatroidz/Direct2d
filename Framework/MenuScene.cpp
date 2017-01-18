@@ -26,8 +26,8 @@ void MenuScene::OnUpdate()
 		GoToScene(new TestScene());
 		return;
 	}*/
-	if (Game::Instance()->IsLButtonDown()) pimpl->test->Transfer(-5, 0);
-	if (Game::Instance()->IsRButtonDown()) pimpl->test->Transfer(5, 0);
+	if (Game::Instance()->GetLeftMouseDown()) pimpl->test->Transfer(-5, 0);
+	if (Game::Instance()->GetRightMouseDown()) pimpl->test->Transfer(5, 0);
 }
 
 void MenuScene::OnDraw()

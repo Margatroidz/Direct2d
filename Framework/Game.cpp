@@ -85,27 +85,27 @@ void Game::SetMousePosition(int x, int y)
 	pimpl->_inputBuffer._mousePositionX = x;
 	pimpl->_inputBuffer._mousePositionY = y;
 }
-void Game::LButtonDown()
+void Game::LeftMouseDown()
 {
 	pimpl->_inputBuffer._isLeftButtonDown++;
 }
-void Game::MButtonDown()
+void Game::MiddleMouseDown()
 {
 	pimpl->_inputBuffer._isMiddleButtonDown++;
 }
-void Game::RButtonDown()
+void Game::RightMouseDown()
 {
 	pimpl->_inputBuffer._isRightButtonDown++;
 }
-void Game::LButtonUp()
+void Game::LeftMouseUp()
 {
 	pimpl->_inputBuffer._isLeftButtonUp++;
 }
-void Game::MButtonUp()
+void Game::MiddleMouseUp()
 {
 	pimpl->_inputBuffer._isMiddleButtonUp++;
 }
-void Game::RButtonUp()
+void Game::RightMouseUp()
 {
 	pimpl->_inputBuffer._isRightButtonUp++;
 }
@@ -130,32 +130,31 @@ int Game::GetMousePositionY()
 {
 	return pimpl->_inputBuffer._mousePositionY;
 }
-unsigned int Game::IsLButtonDown()
+unsigned int Game::GetLeftMouseDown()
 {
 	return pimpl->_inputBuffer._isLeftButtonDown;
 }
-unsigned int Game::IsMButtonDown()
+unsigned int Game::GetMiddleMouseDown()
 {
 	return pimpl->_inputBuffer._isMiddleButtonDown;
 }
-unsigned int Game::IsRButtonDown()
+unsigned int Game::GetRightMouseDown()
 {
 	return pimpl->_inputBuffer._isRightButtonDown;
 }
-unsigned int Game::IsLButtonUp()
+unsigned int Game::GetLeftMouseUp()
 {
 	return pimpl->_inputBuffer._isLeftButtonUp;
 }
-unsigned int Game::IsMButtonUp()
+unsigned int Game::GetMiddleMouseUp()
 {
 	return pimpl->_inputBuffer._isMiddleButtonUp;
 }
-unsigned int Game::IsRButtonUp()
+unsigned int Game::GetRightMouseUp()
 {
 	return pimpl->_inputBuffer._isRightButtonUp;
 }
 #pragma endregion
-
 
 Game::Game() :pimpl(new Impl)
 {
