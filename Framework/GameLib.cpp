@@ -3,5 +3,7 @@
 
 void GoToScene(Scene * nextScene)
 {
-	Game::Instance()->ChangeScene(nextScene);
+	Game::Instance()->GoToScene(nextScene);
+	Sleep(5000);
+	throw "GoToScene ¶W®É !";
 }

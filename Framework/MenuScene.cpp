@@ -20,14 +20,20 @@ void MenuScene::OnInitialize()
 
 void MenuScene::OnUpdate()
 {
-	/*static float c = 0;
+	static float c = 0;
 	pimpl->test->Rotate(c++);
 	if (c >= 180) {
 		GoToScene(new TestScene());
 		return;
+<<<<<<< HEAD
 	}*/
 	if (Game::Instance()->GetLeftMouseDown()) pimpl->test->Transfer(-5, 0);
 	if (Game::Instance()->GetRightMouseDown()) pimpl->test->Transfer(5, 0);
+=======
+	}
+	//if (Game::Instance()->GetLeftMouseDown()) pimpl->test->Transfer(-5, 0);
+	//if (Game::Instance()->GetRightMouseDown()) pimpl->test->Transfer(5, 0);
+>>>>>>> origin/master
 }
 
 void MenuScene::OnDraw()

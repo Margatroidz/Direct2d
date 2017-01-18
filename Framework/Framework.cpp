@@ -139,26 +139,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_CREATE:
-		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
-		SetTimer(hWnd, 0, 16, DelayTimer);
-		break;
 	case WM_KEYDOWN:
-	{
-		unsigned int i = wParam;
-		Game::Instance()->KeyDown(i);
+		Game::Instance()->KeyDown((unsigned int)wParam);
 		//wchar_t buffer[256];
 		//wsprintf(buffer, L"%d", i);
 		//MessageBox(hWnd, buffer, buffer, MB_OK);
-	}
-	break;
+		break;
 	case WM_KEYUP:
-	{
-		unsigned int i = wParam;
-		Game::Instance()->KeyUp(i);
+		Game::Instance()->KeyUp((unsigned int)wParam);
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);
-	}
-	break;
+		break;
 	case WM_MOUSEMOVE:
 		Game::Instance()->SetMousePosition(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
@@ -183,6 +173,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_MBUTTONUP:
 		Game::Instance()->MiddleMouseUp();
+		break;
+	case WM_SWITCH_SCENE:
+		Game::Instance()->SwitchScene();
+		break;
+	case WM_CREATE:
+		Direct2D::Instance()->CreateDirect2dDevice(hWnd);
+		SetTimer(hWnd, 0, 16, DelayTimer);
 		break;
 	case WM_COMMAND:
 	{
@@ -242,7 +239,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 void CALLBACK DelayTimer(HWND hWnd, UINT message, UINT timerID, DWORD time)
 {
 	KillTimer(hWnd, 0);
-	Game::Instance()->Initial();
+	Game::Instance()->Initial((unsigned int)hWnd);
 	SetTimer(nullptr, 1, 16, FixedUpdated);
 }
 

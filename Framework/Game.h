@@ -1,15 +1,18 @@
-#pragma once
 #include <memory>
+#define WM_SWITCH_SCENE (WM_USER + 0x0001)
 
 class Scene;
 class Game 
 {
 public:
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
 	static Game* Instance();
-	void Initial();
+	void Initial(unsigned int hWnd);
 	void FixedUpdate();
 	void Release();
-	void ChangeScene(Scene* nextScene);
+	void GoToScene(Scene* nextScene);
+	void SwitchScene();
 
 #pragma region InputMethod
 	void KeyDown(unsigned int key);
@@ -35,8 +38,12 @@ public:
 #pragma endregion
 
 private:
-	Game();
-	~Game();
 	struct Impl;
 	std::unique_ptr<Impl> pimpl;
+	Game();
+	~Game();
+	void CreateScene();
+	void DestoryScene();
+	void ShutDownThread();
+	void GameLoop();
 };
