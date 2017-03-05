@@ -6,12 +6,14 @@
 
 struct MenuScene::Impl {
 	Image* test;
+	Text* text;
 };
 
 MenuScene::MenuScene() :pimpl(new Impl) {}
 
 void MenuScene::OnInitialize()
 {
+	pimpl->text = new Text(L"¬O");
 	pimpl->test = new Bitmap(132);
 	pimpl->test->Scale(5, 5);
 	pimpl->test->SetTopLeftPosition(400, 150);
@@ -33,6 +35,7 @@ void MenuScene::OnUpdate()
 void MenuScene::OnDraw()
 {
 	pimpl->test->Draw();
+	pimpl->text->Draw();
 }
 
 void MenuScene::OnClose()

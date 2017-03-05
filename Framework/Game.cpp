@@ -21,52 +21,76 @@ struct Input {
 struct Game::Impl {
 	Impl();
 	~Impl();
+	DWORD GameLoop(void);
+	static DWORD WINAPI GameLoopWrapper(void* Param);
+
+	HANDLE _gameLoopThreadID;
 	Scene* _scene;
 	Input _inputBuffer;
+	bool _sceneChnageflag;
+	bool _gameCloseflag;
 };
 
-Game::Impl::Impl() :_scene(nullptr) {}
-
+Game::Impl::Impl() :_scene(nullptr), _sceneChnageflag(false), _gameCloseflag(false){}
 Game::Impl::~Impl() {}
 
-Game * Game::Instance()
-{
+DWORD Game::Impl::GameLoop(void) {
+	while (true) {
+		if (_gameCloseflag) break;
+
+		_sceneChnageflag = false;
+		_scene->OnInitialize();
+		while (true) {
+			_scene->OnUpdate();
+			memset(&_inputBuffer, 0, sizeof(Input));
+
+			if (_sceneChnageflag) break;
+
+			Direct2D::Instance()->BeginDraw();
+			_scene->OnDraw();
+			Direct2D::Instance()->EndDraw();
+
+			Sleep(15);
+		}
+	}
+	return S_OK;
+}
+
+DWORD WINAPI Game::Impl::GameLoopWrapper(void* Param) {
+	return Game::Instance()->pimpl->GameLoop();
+}
+
+Game * Game::Instance() {
 	static Game instance;
 	return &instance;
 }
 
-void Game::Initial()
-{
+void Game::Initial() {
 	ChangeScene(new INIT_SCENE());
+	//用windows API的thread才可以順利使用wicfactory，似乎跟COM元件有關係，COM元件似乎對C++內建的thread支援度很差
+	pimpl->_gameLoopThreadID = CreateThread(nullptr, 0, pimpl->GameLoopWrapper, (void*) this, 0, nullptr);
 }
 
-void Game::FixedUpdate()
-{
-	pimpl->_scene->OnUpdate();
-	memset(&pimpl->_inputBuffer, 0, sizeof(Input));
-	Direct2D::Instance()->BeginDraw();
-	pimpl->_scene->OnDraw();
-	Direct2D::Instance()->EndDraw();
-}
+void Game::Release() {
+	pimpl->_sceneChnageflag = true;
+	pimpl->_gameCloseflag = true;
 
-void Game::Release()
-{
+	//最多等待5秒，用無限大太危險
+	WaitForSingleObjectEx(pimpl->_gameLoopThreadID, 5000, true);
+
 	if (pimpl->_scene) {
 		pimpl->_scene->OnClose();
 		delete pimpl->_scene;
 	}
 }
 
-void Game::ChangeScene(Scene * nextScene)
-{
+void Game::ChangeScene(Scene * nextScene) {
 	if (pimpl->_scene) {
 		pimpl->_scene->OnClose();
 		delete pimpl->_scene;
 	}
 	pimpl->_scene = nextScene;
-	Direct2D::Instance()->BeginLoad();
-	pimpl->_scene->OnInitialize();
-	Direct2D::Instance()->EndLoad();
+	pimpl->_sceneChnageflag = true;
 }
 
 #pragma region InputMethod
@@ -154,8 +178,7 @@ unsigned int Game::GetRightMouseUp()
 }
 #pragma endregion
 
-Game::Game() :pimpl(new Impl)
-{
+Game::Game() :pimpl(new Impl) {
 	memset(&pimpl->_inputBuffer, 0, sizeof(Input));
 	//int i = sizeof(Input);
 	//wchar_t buffer[256];
@@ -163,6 +186,5 @@ Game::Game() :pimpl(new Impl)
 	//MessageBox(nullptr, L"constructer", L"constructer", MB_OK);
 }
 
-Game::~Game()
-{
+Game::~Game() {
 }

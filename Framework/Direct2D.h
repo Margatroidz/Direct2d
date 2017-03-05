@@ -12,8 +12,6 @@ public:
 	ID2D1Bitmap* LoadBitmapD(int resourceNumber);
 	ID2D1Bitmap* LoadBitmapD(char* resourceName);
 	void DestroyBitmap(ID2D1Bitmap* image);
-	void BeginLoad();
-	void EndLoad();
 	void BeginDraw();
 	void EndDraw();
 	void Rotate(D2D1::Matrix3x2F matrix);

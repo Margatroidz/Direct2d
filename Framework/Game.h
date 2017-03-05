@@ -9,7 +9,6 @@ public:
 	Game& operator=(const Game&) = delete;
 	static Game* Instance();
 	void Initial();
-	void FixedUpdate();
 	void Release();
 	void ChangeScene(Scene* nextScene);
 

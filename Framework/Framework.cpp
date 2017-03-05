@@ -237,11 +237,4 @@ void CALLBACK DelayTimer(HWND hWnd, UINT message, UINT timerID, DWORD time)
 {
 	KillTimer(hWnd, 0);
 	Game::Instance()->Initial();
-	SetTimer(nullptr, 1, 16, FixedUpdated);
-}
-
-void CALLBACK FixedUpdated(HWND hWnd, UINT message, UINT timerID, DWORD time)
-{
-	//MessageBeep(-1);
-	Game::Instance()->FixedUpdate();
 }

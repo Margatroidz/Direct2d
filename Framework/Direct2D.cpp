@@ -29,6 +29,7 @@ Direct2D::~Direct2D()
 {
 	SafeRelease(&_direct2dFactory);
 	SafeRelease(&_direct2dRenderTarget);
+	SafeRelease(&_wicFactory);
 }
 
 Direct2D* Direct2D::Instance()
@@ -39,8 +40,14 @@ Direct2D* Direct2D::Instance()
 
 HRESULT Direct2D::CreateDirect2dDevice(HWND hwnd)
 {
+	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+	ASSERT(hr);
+
+	hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&_wicFactory);
+	ASSERT(hr);
+
 	_hwnd = hwnd;
-	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_direct2dFactory);
+	hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_direct2dFactory);
 	ASSERT(hr);
 
 	RECT rc;
@@ -69,16 +76,6 @@ ID2D1Bitmap* Direct2D::LoadBitmapD(char* resourceName)
 void Direct2D::DestroyBitmap(ID2D1Bitmap* image)
 {
 	SafeRelease(&image);
-}
-
-void Direct2D::BeginLoad()
-{
-	CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&_wicFactory);
-}
-
-void Direct2D::EndLoad()
-{
-	SafeRelease(&_wicFactory);
 }
 
 void Direct2D::BeginDraw()
@@ -137,42 +134,6 @@ ID2D1SolidColorBrush * Direct2D::CreateBrush()
 	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &result);
 	return result;
 }
-//
-//void Direct2D::Test()
-//{
-//	static const WCHAR msc_fontName[] = L"Gabriola";
-//	static const FLOAT msc_fontSize = 50;
-//	IDWriteFactory* m_pDWriteFactory = NULL;
-//	IDWriteTextFormat* m_pTextFormat;
-//
-//	DWriteCreateFactory(
-//		DWRITE_FACTORY_TYPE_SHARED,
-//		__uuidof(m_pDWriteFactory),
-//		reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-//	);
-//	m_pDWriteFactory->CreateTextFormat(
-//		msc_fontName,
-//		NULL,
-//		DWRITE_FONT_WEIGHT_REGULAR,
-//		DWRITE_FONT_STYLE_NORMAL,
-//		DWRITE_FONT_STRETCH_NORMAL,
-//		msc_fontSize,
-//		L"en-us",
-//		&m_pTextFormat
-//	);
-//	m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-//	m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-//
-//	ID2D1SolidColorBrush* brush = nullptr;
-//
-//	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &brush);
-//
-//	DrawTextD("Hello\nWorld !", m_pTextFormat, brush);
-//
-//	SafeRelease(&m_pDWriteFactory);
-//	SafeRelease(&m_pTextFormat);
-//	SafeRelease(&brush);
-//}
 
 ID2D1Bitmap* Direct2D::LoadBitmapD(PCWSTR resourceName)
 {
@@ -182,8 +143,6 @@ ID2D1Bitmap* Direct2D::LoadBitmapD(PCWSTR resourceName)
 	IWICStream *pStream = nullptr;
 	IWICFormatConverter *pConverter = nullptr;
 
-
-	// Locate the resource.
 	HRSRC imageResHandle = FindResourceW(GetModuleHandle(nullptr), resourceName, L"Image");
 	ASSERT(imageResHandle ? S_OK : E_FAIL);
 
