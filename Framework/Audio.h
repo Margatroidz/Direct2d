@@ -1,11 +1,12 @@
-#include<memory>
+#include <xaudio2.h>
 
 class Audio
 {
 public:
 	Audio();
 	~Audio();
+	void Test();
 private:
-	struct Impl;
-	std::unique_ptr<Impl> pimpl;
+	IXAudio2* _engine;
+	IXAudio2MasteringVoice* _voice;
 };

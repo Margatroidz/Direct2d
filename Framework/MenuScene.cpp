@@ -7,6 +7,8 @@
 struct MenuScene::Impl {
 	Image* test;
 	Text* text;
+
+	Audio *a;
 };
 
 MenuScene::MenuScene() :pimpl(new Impl) {}
@@ -18,6 +20,9 @@ void MenuScene::OnInitialize()
 	pimpl->test->Scale(5, 5);
 	pimpl->test->SetTopLeftPosition(400, 150);
 	pimpl->test->SetOpacity(0.5);
+
+	pimpl->a = new Audio();
+	pimpl->a->Test();
 }
 
 void MenuScene::OnUpdate()
@@ -40,5 +45,6 @@ void MenuScene::OnDraw()
 
 void MenuScene::OnClose()
 {
+	delete pimpl->a;
 	delete pimpl->test;
 }

@@ -26,31 +26,39 @@ struct Game::Impl {
 
 	HANDLE _gameLoopThreadID;
 	Scene* _scene;
+	Scene* _nextScene;
 	Input _inputBuffer;
 	bool _sceneChnageflag;
 	bool _gameCloseflag;
 };
 
-Game::Impl::Impl() :_scene(nullptr), _sceneChnageflag(false), _gameCloseflag(false){}
+Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr), _sceneChnageflag(false), _gameCloseflag(false) {}
 Game::Impl::~Impl() {}
 
 DWORD Game::Impl::GameLoop(void) {
-	while (true) {
-		if (_gameCloseflag) break;
+	while (!_gameCloseflag) {
 
 		_sceneChnageflag = false;
 		_scene->OnInitialize();
+
 		while (true) {
 			_scene->OnUpdate();
 			memset(&_inputBuffer, 0, sizeof(Input));
-
 			if (_sceneChnageflag) break;
-
 			Direct2D::Instance()->BeginDraw();
 			_scene->OnDraw();
 			Direct2D::Instance()->EndDraw();
-
 			Sleep(15);
+		}
+
+		if (_scene) {
+			_scene->OnClose();
+			delete _scene;
+			_scene = nullptr;
+		}
+		if (_nextScene) {
+			_scene = _nextScene;
+			_nextScene = nullptr;
 		}
 	}
 	return S_OK;
@@ -66,7 +74,7 @@ Game * Game::Instance() {
 }
 
 void Game::Initial() {
-	ChangeScene(new INIT_SCENE());
+	pimpl->_scene = new INIT_SCENE();
 	//用windows API的thread才可以順利使用wicfactory，似乎跟COM元件有關係，COM元件似乎對C++內建的thread支援度很差
 	pimpl->_gameLoopThreadID = CreateThread(nullptr, 0, pimpl->GameLoopWrapper, (void*) this, 0, nullptr);
 }
@@ -77,19 +85,10 @@ void Game::Release() {
 
 	//最多等待5秒，用無限大太危險
 	WaitForSingleObjectEx(pimpl->_gameLoopThreadID, 5000, true);
-
-	if (pimpl->_scene) {
-		pimpl->_scene->OnClose();
-		delete pimpl->_scene;
-	}
 }
 
 void Game::ChangeScene(Scene * nextScene) {
-	if (pimpl->_scene) {
-		pimpl->_scene->OnClose();
-		delete pimpl->_scene;
-	}
-	pimpl->_scene = nextScene;
+	pimpl->_nextScene = nextScene;
 	pimpl->_sceneChnageflag = true;
 }
 
