@@ -28,8 +28,7 @@ protected:
 class Bitmap : public Image
 {
 public:
-	Bitmap(char* resourceName);
-	Bitmap(int resourceNumber);
+	Bitmap(char* path);
 	~Bitmap();
 	void Draw();
 private:
@@ -39,8 +38,7 @@ private:
 class Animation : public Image
 {
 public:
-	Animation(char** resourceName, int number, float interval);
-	Animation(int* resourceNumber, int number, float interval);
+	Animation(char** resourcePath, int number, float interval);
 	~Animation();
 	void Draw();
 	void ResetImage();

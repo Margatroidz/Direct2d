@@ -2,6 +2,7 @@
 #pragma comment(lib, "dwrite")
 #pragma comment(lib, "windowscodecs")
 #include "Direct2D.h"
+#include <wrl/client.h>
 #include <wincodec.h>
 #include <memory>
 #include <dwrite.h>
@@ -63,14 +64,27 @@ HRESULT Direct2D::CreateDirect2dDevice(HWND hwnd)
 	return hr;
 }
 
-ID2D1Bitmap* Direct2D::LoadBitmapD(int resourceNumber)
+ID2D1Bitmap* Direct2D::LoadBitmapD(char* path)
 {
-	return LoadBitmapD(MAKEINTRESOURCE(resourceNumber));
-}
+	ID2D1Bitmap* bitmap = nullptr;
+	IWICBitmapDecoder* decoder = nullptr;
+	IWICBitmapFrameDecode *bitmapSource = nullptr;
+	IWICFormatConverter *converter = nullptr;
 
-ID2D1Bitmap* Direct2D::LoadBitmapD(char* resourceName)
-{
-	return LoadBitmapD((WCHAR*)resourceName);;
+	int length = strlen(path) + 1;
+	wchar_t* wPath = new wchar_t[length];
+	mbstowcs_s(0, wPath, length, path, _TRUNCATE);
+	_wicFactory->CreateDecoderFromFilename(wPath, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder);
+	decoder->GetFrame(0, &bitmapSource);
+	_wicFactory->CreateFormatConverter(&converter);
+	converter->Initialize(bitmapSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.f, WICBitmapPaletteTypeMedianCut);
+	ASSERT(_direct2dRenderTarget->CreateBitmapFromWicBitmap(converter, nullptr, &bitmap));
+
+	SafeRelease(&decoder);
+	SafeRelease(&bitmapSource);
+	SafeRelease(&converter);
+
+	return bitmap;
 }
 
 void Direct2D::DestroyBitmap(ID2D1Bitmap* image)
@@ -133,39 +147,4 @@ ID2D1SolidColorBrush * Direct2D::CreateBrush()
 	ID2D1SolidColorBrush* result = nullptr;
 	_direct2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &result);
 	return result;
-}
-
-ID2D1Bitmap* Direct2D::LoadBitmapD(PCWSTR resourceName)
-{
-	ID2D1Bitmap* bitmap = nullptr;
-	IWICBitmapDecoder* pDecoder = nullptr;
-	IWICBitmapFrameDecode *pSource = nullptr;
-	IWICStream *pStream = nullptr;
-	IWICFormatConverter *pConverter = nullptr;
-
-	HRSRC imageResHandle = FindResourceW(GetModuleHandle(nullptr), resourceName, L"Image");
-	ASSERT(imageResHandle ? S_OK : E_FAIL);
-
-	HGLOBAL imageResDataHandle = LoadResource(GetModuleHandle(nullptr), imageResHandle);
-	ASSERT(imageResDataHandle ? S_OK : E_FAIL);
-
-	void *pImageFile = LockResource(imageResDataHandle);
-	ASSERT(pImageFile ? S_OK : E_FAIL);
-
-	DWORD imageFileSize = SizeofResource(GetModuleHandle(nullptr), imageResHandle);
-	ASSERT(imageFileSize ? S_OK : E_FAIL);
-
-	ASSERT(_wicFactory->CreateStream(&pStream));
-	ASSERT(pStream->InitializeFromMemory(reinterpret_cast<BYTE*>(pImageFile), imageFileSize));
-	ASSERT(_wicFactory->CreateDecoderFromStream(pStream, nullptr, WICDecodeMetadataCacheOnLoad, &pDecoder));
-	ASSERT(pDecoder->GetFrame(0, &pSource));
-	ASSERT(_wicFactory->CreateFormatConverter(&pConverter));
-	ASSERT(pConverter->Initialize(pSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.f, WICBitmapPaletteTypeMedianCut));
-	ASSERT(_direct2dRenderTarget->CreateBitmapFromWicBitmap(pConverter, nullptr, &bitmap));
-
-	SafeRelease(&pDecoder);
-	SafeRelease(&pSource);
-	SafeRelease(&pStream);
-	SafeRelease(&pConverter);
-	return bitmap;
 }

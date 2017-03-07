@@ -68,15 +68,9 @@ void Image::DrawBitmap(ID2D1Bitmap * bitmap)
 	else Direct2D::Instance()->DrawBitmap(bitmap, D2D1::RectF(_topLeft.x, _topLeft.y, _topLeft.x + _size.width, _topLeft.y + _size.height), _opacity);
 }
 
-Bitmap::Bitmap(char* resourceName)
+Bitmap::Bitmap(char* path)
 {
-	_bitmap = Direct2D::Instance()->LoadBitmapD(resourceName);
-	_size = _bitmap->GetSize();
-}
-
-Bitmap::Bitmap(int resourceNumber)
-{
-	_bitmap = Direct2D::Instance()->LoadBitmapD(resourceNumber);
+	_bitmap = Direct2D::Instance()->LoadBitmapD(path);
 	_size = _bitmap->GetSize();
 }
 
@@ -90,24 +84,12 @@ void Bitmap::Draw()
 	DrawBitmap(_bitmap);
 }
 
-Animation::Animation(char** resourceName, int number, float interval) : _interval((int)(60.0 * interval)), _counter(0)
+Animation::Animation(char** resourcePath, int number, float interval) : _interval((int)(60.0 * interval)), _counter(0)
 {
 	//陣列預留一個位置放null，判斷animation的結尾
 	_bitmaps = new ID2D1Bitmap*[number + 1];
 	for (int i = 0; i < number; i++) {
-		_bitmaps[i] = Direct2D::Instance()->LoadBitmapD(resourceName[i]);
-	}
-	_bitmaps[number] = nullptr;
-	_bitmap = _bitmaps;
-	_oriSize = (*_bitmap)->GetSize();
-	_size = (*_bitmap)->GetSize();
-}
-
-Animation::Animation(int * resourceNumber, int number, float interval) : _interval((int)(60.0 * interval)), _counter(0)
-{
-	_bitmaps = new ID2D1Bitmap*[number + 1];
-	for (int i = 0; i < number; i++) {
-		_bitmaps[i] = Direct2D::Instance()->LoadBitmapD(resourceNumber[i]);
+		_bitmaps[i] = Direct2D::Instance()->LoadBitmapD(resourcePath[i]);
 	}
 	_bitmaps[number] = nullptr;
 	_bitmap = _bitmaps;

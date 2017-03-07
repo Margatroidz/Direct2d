@@ -9,8 +9,7 @@ public:
 	Direct2D& operator=(const Direct2D&) = delete;
 	static Direct2D* Instance();
 	HRESULT CreateDirect2dDevice(HWND hwnd);
-	ID2D1Bitmap* LoadBitmapD(int resourceNumber);
-	ID2D1Bitmap* LoadBitmapD(char* resourceName);
+	ID2D1Bitmap* LoadBitmapD(char* path);
 	void DestroyBitmap(ID2D1Bitmap* image);
 	void BeginDraw();
 	void EndDraw();
@@ -23,7 +22,6 @@ public:
 private:
 	Direct2D();
 	~Direct2D();
-	ID2D1Bitmap* LoadBitmapD(PCWSTR resourceName);
 	HWND _hwnd;
 	ID2D1Factory* _direct2dFactory;
 	ID2D1HwndRenderTarget* _direct2dRenderTarget;
