@@ -9,7 +9,7 @@ public:
 	Direct2D& operator=(const Direct2D&) = delete;
 	static Direct2D* Instance();
 	HRESULT CreateDirect2dDevice(HWND hwnd);
-	ID2D1Bitmap* LoadBitmapD(char* path);
+	ID2D1Bitmap* LoadBitmapD(char* sourcePath);
 	void DestroyBitmap(ID2D1Bitmap* image);
 	void BeginDraw();
 	void EndDraw();

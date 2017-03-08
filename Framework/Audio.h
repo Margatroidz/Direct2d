@@ -1,12 +1,17 @@
-#include <xaudio2.h>
+#pragma once
+#include <memory>
 
 class Audio
 {
 public:
-	Audio();
+	Audio(const Audio&) = delete;
+	Audio& operator=(const Audio&) = delete;
+	Audio(char* sourcePath);
 	~Audio();
-	void Test();
+	void Play();
+	void Stop();
+	void SetVolume(float volumn);
 private:
-	IXAudio2* _engine;
-	IXAudio2MasteringVoice* _voice;
+	struct Impl;
+	std::unique_ptr<Impl> pimpl;
 };

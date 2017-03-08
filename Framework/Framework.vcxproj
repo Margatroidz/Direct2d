@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="XAudio2.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Direct2D.h" />
     <ClInclude Include="Framework.h" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="XAudio2.cpp" />
     <ClCompile Include="Direct2D.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Game.cpp" />

@@ -64,16 +64,16 @@ HRESULT Direct2D::CreateDirect2dDevice(HWND hwnd)
 	return hr;
 }
 
-ID2D1Bitmap* Direct2D::LoadBitmapD(char* path)
+ID2D1Bitmap* Direct2D::LoadBitmapD(char* sourcePath)
 {
 	ID2D1Bitmap* bitmap = nullptr;
 	IWICBitmapDecoder* decoder = nullptr;
 	IWICBitmapFrameDecode *bitmapSource = nullptr;
 	IWICFormatConverter *converter = nullptr;
 
-	int length = strlen(path) + 1;
+	int length = strlen(sourcePath) + 1;
 	wchar_t* wPath = new wchar_t[length];
-	mbstowcs_s(0, wPath, length, path, _TRUNCATE);
+	mbstowcs_s(0, wPath, length, sourcePath, _TRUNCATE);
 	_wicFactory->CreateDecoderFromFilename(wPath, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder);
 	decoder->GetFrame(0, &bitmapSource);
 	_wicFactory->CreateFormatConverter(&converter);

@@ -12,13 +12,12 @@ TestScene::TestScene() :pimpl(new Impl) {}
 
 void TestScene::OnInitialize()
 {
-	Audio a;
-	char* ttt[6] = { "C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_00.png",
-		"C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_01.png",
-		"C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_02.png",
-		"C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_03.png",
-		"C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_04.png",
-		"C:\\Users\\Mystia\\Downloads\\Framework\\Framework\\image\\E_bullet_05.png" };
+	char* ttt[6] = { "../Framework/image/E_bullet_00.png",
+		"../Framework/image/E_bullet_01.png",
+		"../Framework/image/E_bullet_02.png",
+		"../Framework/image/E_bullet_03.png",
+		"../Framework/image/E_bullet_04.png",
+		"../Framework/image/E_bullet_05.png" };
 	pimpl->test = new Animation(ttt, 6, (float)0.1);
 	pimpl->test->SetTopLeftPosition(150, 150);
 	pimpl->test->Scale(3, 3);

@@ -33,9 +33,6 @@
     <ClInclude Include="Framework.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>FrameWork</Filter>
-    </ClInclude>
     <ClInclude Include="Direct2D.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
@@ -63,13 +60,16 @@
     <ClInclude Include="Text.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
+    <ClInclude Include="XAudio2.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp">
       <Filter>原始程式檔</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="Direct2D.cpp">
       <Filter>FrameWork</Filter>
@@ -90,6 +90,12 @@
       <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="GameLib.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="XAudio2.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
   </ItemGroup>
