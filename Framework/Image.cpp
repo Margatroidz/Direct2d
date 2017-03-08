@@ -24,6 +24,11 @@ void Image::SetTopLeftPosition(float x, float y)
 
 void Image::Rotate(float angle)
 {
+	_rotateAngle += angle;
+}
+
+void Image::SetAngle(float angle)
+{
 	_rotateAngle = angle;
 }
 

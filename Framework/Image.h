@@ -11,6 +11,7 @@ public:
 	virtual void ResetImage();
 	void SetTopLeftPosition(float x, float y);
 	void Rotate(float angle);
+	void SetAngle(float angle);
 	void Transfer(float x, float y);
 	void ResetSize();
 	void Resize(float width, float high);
