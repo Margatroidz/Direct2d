@@ -7,6 +7,7 @@ public:
 	~Character();
 	void Hit();
 	void OnLoad();
+	void OnInput();
 	void OnUpdate();
 	void OnDraw();
 private:

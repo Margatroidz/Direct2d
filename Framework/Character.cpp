@@ -63,6 +63,11 @@ void Character::OnLoad() {
 	pimpl->_speed = 1;
 }
 
+void Character::OnInput()
+{
+	//if(Game)
+}
+
 void Character::OnUpdate() {
 	if (pimpl->_isSlowMode) pimpl->_speed = 0.25;
 	else pimpl->_speed = 1;
