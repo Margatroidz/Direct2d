@@ -139,17 +139,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_KEYDOWN: {
-		//Game::Instance()->KeyDown((unsigned int)wParam);
-		wchar_t* wPath = new WCHAR[3];
-		char* path = new char[3];
-		sprintf_s(path, 3, "%d", (unsigned int)wParam);
-		mbstowcs_s(0, wPath, strlen(path) + 1, path, _TRUNCATE);
-		MessageBox(nullptr, wPath, wPath, MB_OK);
-		delete wPath;
-		delete path;
-		break; 
-	}
+	case WM_KEYDOWN:
+		Game::Instance()->KeyDown((unsigned int)wParam);
+		break;
 	case WM_KEYUP:
 		Game::Instance()->KeyUp((unsigned int)wParam);
 		//MessageBox(nullptr, (LPCWSTR)lParam, (LPCWSTR)lParam, MB_OK);

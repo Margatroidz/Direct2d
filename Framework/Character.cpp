@@ -16,12 +16,14 @@ struct Character::Impl {
 	int _autoMove;
 	int _countX;
 	int _countY;
-	int _moveingX;
-	int _moveingY;
+	float _moveingX;
+	float _moveingY;
 	bool _isFire;
 	bool _isSlowMode;
 	int _interval;
-	int _speed;
+	float _speed;
+
+	//Text* text = nullptr;
 };
 
 Character::Character() :pimpl(new Impl) {}
@@ -65,10 +67,52 @@ void Character::OnLoad() {
 
 void Character::OnInput()
 {
-	//if(Game)
+	//char* format = new char[64];
+	//sprintf_s(format, 64, "%f", pimpl->_moveingX);
+
+	//int length = strlen(format) + 1;
+	//wchar_t* wFormat = new wchar_t[length];
+	//mbstowcs_s(0, wFormat, length, format, _TRUNCATE);
+
+	//if (pimpl->text) delete pimpl->text;
+	//pimpl->text = new Text(wFormat);
+	//
+	//壓住按鍵的時候會連續發送Down的message，怎麼跟我想像的不大一樣，問題 ?
+	//
+	if (GetKeyDown(KeyCode::KEY_LEFT_ARROW)) pimpl->_moveingX -= 2.5;
+
+	if (GetKeyDown(KeyCode::KEY_RIGHT_ARROW)) pimpl->_moveingX += 2.5;
+
+	if (GetKeyDown(KeyCode::KEY_UP_ARROW)) pimpl->_moveingY -= 2.5;
+
+	if (GetKeyDown(KeyCode::KEY_DOWN_ARROW)) pimpl->_moveingY += 2.5;
+
+	if (GetKeyDown(KeyCode::KEY_SHIFT)) {
+		pimpl->_characterPicture = pimpl->_yuKari;
+		pimpl->_isSlowMode = true;
+	}
+
+	if (GetKeyDown(KeyCode::KEY_Z)) pimpl->_isFire = true;
+
+	if (GetKeyUp(KeyCode::KEY_LEFT_ARROW)) pimpl->_moveingX += 2.5;
+
+	if (GetKeyUp(KeyCode::KEY_RIGHT_ARROW)) pimpl->_moveingX -= 2.5;
+
+	if (GetKeyUp(KeyCode::KEY_UP_ARROW)) pimpl->_moveingY += 2.5;
+
+	if (GetKeyUp(KeyCode::KEY_DOWN_ARROW)) pimpl->_moveingY -= 2.5;
+
+	if (GetKeyUp(KeyCode::KEY_SHIFT)) {
+		pimpl->_characterPicture = pimpl->_reiMu;
+		pimpl->_isSlowMode = false;
+	}
+
+	if (GetKeyUp(KeyCode::KEY_Z)) pimpl->_isFire = false;
 }
 
 void Character::OnUpdate() {
+	OnInput();
+
 	if (pimpl->_isSlowMode) pimpl->_speed = 0.25;
 	else pimpl->_speed = 1;
 	if (pimpl->_immovable == 0) {
@@ -98,4 +142,5 @@ void Character::OnDraw() {
 	pimpl->_characterPicture->Draw();
 	if (pimpl->_isSlowMode)
 		pimpl->_hitPoint->Draw();
+	//if (pimpl->text) pimpl->text->Draw();
 }
