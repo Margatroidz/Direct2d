@@ -9,7 +9,7 @@ FirstStage::FirstStage() :pimpl(new Impl) {}
 
 void FirstStage::OnInitialize() {
 	pimpl->_character = new Character();
-	pimpl->_character->OnLoad();
+	pimpl->_character->OnInitialize();
 }
 
 void FirstStage::OnUpdate() {

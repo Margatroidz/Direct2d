@@ -6,7 +6,9 @@ class Image
 {
 public:
 	Image();
-	virtual ~Image() {};
+	Image(const Image&) = delete;
+	Image& operator=(const Image&) = delete;
+	virtual ~Image();
 	virtual void Draw() = 0;
 	virtual void ResetImage();
 	void SetTopLeftPosition(float x, float y);
@@ -30,6 +32,8 @@ class Bitmap : public Image
 {
 public:
 	Bitmap(char* path);
+	Bitmap(const Bitmap& sourceBitmap);
+	Bitmap& operator=(const Bitmap&) = delete;
 	~Bitmap();
 	void Draw();
 private:
@@ -40,6 +44,8 @@ class Animation : public Image
 {
 public:
 	Animation(char** resourcePath, int number, float interval);
+	Animation(const Animation& sourceAnimation);
+	Animation& operator=(const Animation&) = delete;
 	~Animation();
 	void Draw();
 	void ResetImage();

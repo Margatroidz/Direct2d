@@ -27,12 +27,13 @@ struct Game::Impl {
 	HANDLE _gameLoopThreadID;
 	Scene* _scene;
 	Scene* _nextScene;
+	bool _keyPressed[256];
 	Input _inputBuffer;
 	bool _sceneChnageflag;
 	bool _gameCloseflag;
 };
 
-Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr), _sceneChnageflag(false), _gameCloseflag(false) {}
+Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr),  _sceneChnageflag(false), _gameCloseflag(false) {}
 Game::Impl::~Impl() {}
 
 DWORD Game::Impl::GameLoop(void) {
@@ -95,11 +96,13 @@ void Game::ChangeScene(Scene * nextScene) {
 #pragma region InputMethod
 void Game::KeyDown(unsigned int key)
 {
-	pimpl->_inputBuffer._isKeyDown[key]++;
+	if(!pimpl->_keyPressed[key]) pimpl->_inputBuffer._isKeyDown[key]++;
+	pimpl->_keyPressed[key] = true;
 }
 void Game::KeyUp(unsigned int key)
 {
-	pimpl->_inputBuffer._isKeyUp[key]++;
+	if (pimpl->_keyPressed[key]) pimpl->_inputBuffer._isKeyUp[key]++;
+	pimpl->_keyPressed[key] = false;
 }
 void Game::SetMousePosition(int x, int y)
 {

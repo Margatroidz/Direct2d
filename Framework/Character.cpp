@@ -22,8 +22,6 @@ struct Character::Impl {
 	bool _isSlowMode;
 	int _interval;
 	float _speed;
-
-	//Text* text = nullptr;
 };
 
 Character::Character() :pimpl(new Impl) {}
@@ -38,46 +36,11 @@ void Character::Hit() {
 	pimpl->_positionY = 460;
 }
 
-void Character::OnLoad() {
-	char* reiMu[] = { "../Framework/image/playerm_001.png",
-		"../Framework/image/playerm_002.png",
-		"../Framework/image/playerm_003.png",
-		"../Framework/image/playerm_004.png", };
-	pimpl->_reiMu = new Animation(reiMu, 4, 0.1);
-	char* yuKari[] = { "../Framework/image/playery_001.png",
-		"../Framework/image/playery_002.png",
-		"../Framework/image/playery_003.png",
-		"../Framework/image/playery_004.png", };
-	pimpl->_yuKari = new Animation(yuKari, 4, 0.1);
-	pimpl->_hitPoint = new Bitmap("../Framework/image/hitPoint.png");
-	pimpl->_characterPicture = pimpl->_reiMu;
-
-	pimpl->_immunity = 0;
-	pimpl->_immovable = 0;
-	pimpl->_autoMove = 0;
-	pimpl->_countX = 0;
-	pimpl->_countY = 0;
-	pimpl->_moveingX = 0;
-	pimpl->_moveingY = 0;
-	pimpl->_isFire = false;
-	pimpl->_isSlowMode = false;
-	pimpl->_interval = 0;
-	pimpl->_speed = 1;
-}
-
 void Character::OnInput()
 {
-	//char* format = new char[64];
-	//sprintf_s(format, 64, "%f", pimpl->_moveingX);
-
-	//int length = strlen(format) + 1;
-	//wchar_t* wFormat = new wchar_t[length];
-	//mbstowcs_s(0, wFormat, length, format, _TRUNCATE);
-
-	//if (pimpl->text) delete pimpl->text;
-	//pimpl->text = new Text(wFormat);
 	//
 	//壓住按鍵的時候會連續發送Down的message，怎麼跟我想像的不大一樣，問題 ?
+	//看來是Windows本身的機制，壓住一段時間後，會連續送出down事件，需要自己去取消他
 	//
 	if (GetKeyDown(KeyCode::KEY_LEFT_ARROW)) pimpl->_moveingX -= 2.5;
 
@@ -108,6 +71,33 @@ void Character::OnInput()
 	}
 
 	if (GetKeyUp(KeyCode::KEY_Z)) pimpl->_isFire = false;
+}
+
+void Character::OnInitialize() {
+	char* reiMu[] = { "../Framework/image/playerm_001.png",
+		"../Framework/image/playerm_002.png",
+		"../Framework/image/playerm_003.png",
+		"../Framework/image/playerm_004.png", };
+	pimpl->_reiMu = new Animation(reiMu, 4, 0.1f);
+	char* yuKari[] = { "../Framework/image/playery_001.png",
+		"../Framework/image/playery_002.png",
+		"../Framework/image/playery_003.png",
+		"../Framework/image/playery_004.png", };
+	pimpl->_yuKari = new Animation(yuKari, 4, 0.1f);
+	pimpl->_hitPoint = new Bitmap("../Framework/image/hitPoint.png");
+	pimpl->_characterPicture = pimpl->_reiMu;
+
+	pimpl->_immunity = 0;
+	pimpl->_immovable = 0;
+	pimpl->_autoMove = 0;
+	pimpl->_countX = 0;
+	pimpl->_countY = 0;
+	pimpl->_moveingX = 0;
+	pimpl->_moveingY = 0;
+	pimpl->_isFire = false;
+	pimpl->_isSlowMode = false;
+	pimpl->_interval = 0;
+	pimpl->_speed = 1;
 }
 
 void Character::OnUpdate() {
@@ -142,5 +132,4 @@ void Character::OnDraw() {
 	pimpl->_characterPicture->Draw();
 	if (pimpl->_isSlowMode)
 		pimpl->_hitPoint->Draw();
-	//if (pimpl->text) pimpl->text->Draw();
 }

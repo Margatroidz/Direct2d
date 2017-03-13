@@ -17,8 +17,7 @@ Text::Impl::~Impl() {
 	Direct2D::Instance()->DestroyText(_format, _brush);
 }
 
-Text::Text(wchar_t* text) : pimpl(new Impl)
-{
+Text::Text(wchar_t* text) : pimpl(new Impl) {
 	pimpl->_format = Direct2D::Instance()->CreateTextFormat("Gabriola", 50);
 	pimpl->_brush = Direct2D::Instance()->CreateBrush();
 	int length = wcslen(text) + 1;
@@ -26,8 +25,7 @@ Text::Text(wchar_t* text) : pimpl(new Impl)
 	wcscpy_s(pimpl->_text, length, text);
 }
 
-Text::~Text()
-{
+Text::~Text() {
 }
 
 void Text::Draw()
