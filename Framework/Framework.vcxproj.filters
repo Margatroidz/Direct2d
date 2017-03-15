@@ -110,9 +110,6 @@
     <ClCompile Include="Audio.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="FirstStage.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
     <ClCompile Include="KeyCode.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
@@ -120,6 +117,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstStage.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

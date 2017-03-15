@@ -22,7 +22,7 @@ void MenuScene::OnInitialize()
 	pimpl->test->SetOpacity(0.5);
 
 	pimpl->a = new Audio("../Framework/audio/bgm_stg01.wav");
-	pimpl->a->SetVolume(0.05);
+	pimpl->a->SetVolume(0.05f);
 	pimpl->a->Play();
 }
 

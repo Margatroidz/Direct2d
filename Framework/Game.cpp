@@ -33,7 +33,10 @@ struct Game::Impl {
 	bool _gameCloseflag;
 };
 
-Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr),  _sceneChnageflag(false), _gameCloseflag(false) {}
+Game::Impl::Impl() :_scene(nullptr), _nextScene(nullptr),  _sceneChnageflag(false), _gameCloseflag(false) {
+	memset(&_keyPressed, false, sizeof(_keyPressed));
+	memset(&_inputBuffer, 0, sizeof(Input));
+}
 Game::Impl::~Impl() {}
 
 DWORD Game::Impl::GameLoop(void) {

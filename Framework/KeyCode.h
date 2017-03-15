@@ -38,6 +38,33 @@ public:
 	const static int KEY_Y;
 	const static int KEY_Z;
 
+	const static int KEY_a;
+	const static int KEY_b;
+	const static int KEY_c;
+	const static int KEY_d;
+	const static int KEY_e;
+	const static int KEY_f;
+	const static int KEY_g;
+	const static int KEY_h;
+	const static int KEY_i;
+	const static int KEY_j;
+	const static int KEY_k;
+	const static int KEY_l;
+	const static int KEY_m;
+	const static int KEY_n;
+	const static int KEY_o;
+	const static int KEY_p;
+	const static int KEY_q;
+	const static int KEY_r;
+	const static int KEY_s;
+	const static int KEY_t;
+	const static int KEY_u;
+	const static int KEY_v;
+	const static int KEY_w;
+	const static int KEY_x;
+	const static int KEY_y;
+	const static int KEY_z;
+
 	const static int KEY_BACKSPACE;
 	const static int KEY_TAB;
 	const static int KEY_ENTER;

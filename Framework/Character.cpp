@@ -9,8 +9,8 @@ struct Character::Impl {
 	Bitmap* _hitPoint;
 	Image* _characterPicture;
 
-	float _positionX = 200;
-	float _positionY = 400;
+	float _positionX;
+	float _positionY;
 	int _immunity;
 	int _immovable;
 	int _autoMove;
@@ -36,8 +36,31 @@ void Character::Hit() {
 	pimpl->_positionY = 460;
 }
 
-void Character::OnInput()
-{
+const bool Character::IsSlowMode() {
+	return pimpl->_isSlowMode;
+}
+
+const bool Character::IsFire() {
+	return pimpl->_isFire;
+}
+
+const int Character::GetInterval() {
+	return pimpl->_interval;
+}
+
+const int Character::GetImmovable() {
+	return pimpl->_immovable;
+}
+
+const float Character::GetPositionX() {
+	return pimpl->_positionX;
+}
+
+const float Character::GetPositionY() {
+	return pimpl->_positionY;
+}
+
+void Character::OnInput() {
 	//
 	//壓住按鍵的時候會連續發送Down的message，怎麼跟我想像的不大一樣，問題 ?
 	//看來是Windows本身的機制，壓住一段時間後，會連續送出down事件，需要自己去取消他
@@ -87,6 +110,8 @@ void Character::OnInitialize() {
 	pimpl->_hitPoint = new Bitmap("../Framework/image/hitPoint.png");
 	pimpl->_characterPicture = pimpl->_reiMu;
 
+	pimpl->_positionX = 200;
+	pimpl->_positionY = 400;
 	pimpl->_immunity = 0;
 	pimpl->_immovable = 0;
 	pimpl->_autoMove = 0;
@@ -113,8 +138,8 @@ void Character::OnUpdate() {
 	if (pimpl->_positionX > 370) pimpl->_positionX = 370;
 	if (pimpl->_positionY < 20) pimpl->_positionY = 20;
 	if (pimpl->_positionY > 460) pimpl->_positionY = 460;
-	if (pimpl->_interval < 0) pimpl->_interval = 10;
-	if (pimpl->_isFire) pimpl->_interval--;
+	if (pimpl->_interval < 0) pimpl->_interval = 3;
+	if (pimpl->_isFire || pimpl->_interval > 0) pimpl->_interval--;
 
 	if (pimpl->_immunity > 0) pimpl->_immunity--;
 	if (pimpl->_immovable > 0) pimpl->_immovable--;
