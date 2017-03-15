@@ -78,6 +78,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp">
@@ -120,6 +123,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="FirstStage.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

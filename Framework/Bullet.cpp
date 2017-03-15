@@ -97,7 +97,7 @@ void Bullet::Redirect(float angle, float speed) {
 	if (pimpl->_isImageBullet) pimpl->_bulletPicture->SetAngle(pimpl->_rotation);
 }
 
-void Bullet::RedirectPos(float posDest, float speed, float offset) {
+void Bullet::RedirectPos(float posDestX, float posDestY, float speed, float offset) {
 }
 
 void Bullet::ReRotation(int frequency, float angle, int maxAngle, float speed) {
