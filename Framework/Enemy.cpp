@@ -1,5 +1,12 @@
 #include "Enemy.h"
 
+struct Enemy ::Impl {
+};
+
+
+Enemy::Enemy() {
+}
+
 Enemy::~Enemy() {
 }
 
