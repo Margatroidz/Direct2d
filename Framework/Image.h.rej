@@ -1,0 +1,9 @@
+diff a/Framework/Image.h b/Framework/Image.h	(rejected hunks)
+@@ -11,6 +11,7 @@
+ 	virtual void ResetImage();
+ 	void SetTopLeftPosition(float x, float y);
+ 	void Rotate(float angle);
++	void SetAngle(float angle);
+ 	void Transfer(float x, float y);
+ 	void ResetSize();
+ 	void Resize(float width, float high);

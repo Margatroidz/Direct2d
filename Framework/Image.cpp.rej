@@ -1,0 +1,13 @@
+diff a/Framework/Image.cpp b/Framework/Image.cpp	(rejected hunks)
+@@ -24,6 +24,11 @@
+ 
+ void Image::Rotate(float angle)
+ {
++	_rotateAngle += angle;
++}
++
++void Image::SetAngle(float angle)
++{
+ 	_rotateAngle = angle;
+ }
+ 
